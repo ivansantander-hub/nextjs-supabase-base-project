@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "gitlab": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-gitlab"
+      ]
+    }
+  }
+}
