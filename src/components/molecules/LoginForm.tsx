@@ -3,16 +3,18 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from '@/contexts/I18nContext';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useAuth } from '@/hooks/useAuth';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 
-interface LoginFormProps {
+export interface LoginFormProps {
   onSuccess?: () => void;
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
+  const t = useTranslations('auth');
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'es';
@@ -27,7 +29,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     setFormError(null);
 
     if (!email || !password) {
-      setFormError('Por favor completa todos los campos');
+      setFormError(t('requiredFields'));
       return;
     }
 
@@ -36,7 +38,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       if (onSuccess) onSuccess();
       router.push(`/${locale}/dashboard`);
     } else {
-      setFormError(error?.message || 'Error al iniciar sesión');
+      setFormError(error?.message || t('errors.loginFailed'));
     }
   };
 
@@ -45,10 +47,10 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       {/* Header */}
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Bienvenido de vuelta
+          {t('welcome')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Inicia sesión en tu cuenta
+          {t('signInText')}
         </p>
       </div>
 
@@ -71,9 +73,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           onChange={(e) => setEmail(e.target.value)}
           onFocus={() => setFocusedField('email')}
           onBlur={() => setFocusedField(null)}
-          placeholder="tú@ejemplo.com"
+          placeholder="your@email.com"
           disabled={loading}
-          label="Correo electrónico"
+          label={t('email')}
           icon={<Mail className="w-5 h-5" />}
           iconPosition="left"
           required
@@ -84,13 +86,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       <div className="relative">
         <div className="flex items-center justify-between gap-2 mb-2">
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Contraseña
+            {t('password')}
           </label>
           <Link
             href={`/${locale}/auth/forgot-password`}
             className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
           >
-            ¿Olvidaste tu contraseña?
+            {t('forgotPassword')}
           </Link>
         </div>
         <Input
@@ -116,7 +118,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         isLoading={loading}
         className="w-full mt-8"
       >
-        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+        {loading ? t('signInLoading') : t('signInButton')}
       </Button>
 
       {/* Divider */}
@@ -126,7 +128,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">
-            ¿No tienes cuenta?
+            {t('noAccount')}
           </span>
         </div>
       </div>
@@ -139,12 +141,12 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         className="w-full"
         onClick={() => router.push(`/${locale}/auth/signup`)}
       >
-        Crear cuenta
+        {t('createAccountText')}
       </Button>
 
       {/* Footer */}
       <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-        Al iniciar sesión, aceptas nuestros términos de servicio
+        {t('termsText')}
       </p>
     </form>
   );

@@ -1,15 +1,12 @@
-'use client';
+'use client'
 
-import { useRouter } from 'next/navigation';
-import { useTranslations } from '@/contexts/I18nContext';
-import { LanguageSelector } from '@/components/atoms/LanguageSelector';
-import { Button } from '@/components/atoms/Button';
-import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
-import { ArrowRight, Zap, CheckCircle, Users, Rocket, TrendingUp, Globe, Lightbulb, BarChart3, Shield } from 'lucide-react';
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/atoms/Button'
+import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher'
+import { ArrowRight, Zap, CheckCircle, Users, Rocket, TrendingUp, Globe, Lightbulb, BarChart3, Shield } from 'lucide-react'
 
 export default function HomePage() {
-  const router = useRouter();
-  const t = useTranslations('landing');
+  const router = useRouter()
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
@@ -20,24 +17,23 @@ export default function HomePage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-emerald-500 flex items-center justify-center">
               <Rocket className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-xl text-slate-900 dark:text-white">{t('appName')}</span>
+            <span className="font-bold text-xl text-slate-900 dark:text-white">Task Enrich</span>
           </div>
           <div className="flex items-center gap-4">
             <nav className="hidden sm:flex items-center gap-6">
               <a href="#features" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                {t('navFeatures')}
+                Features
               </a>
               <a href="#pricing" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                {t('navPricing')}
+                Pricing
               </a>
               <a href="#faq" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                {t('navFAQ')}
+                FAQ
               </a>
             </nav>
-            <LanguageSelector />
             <ThemeSwitcher />
             <Button variant="primary" size="md" onClick={() => router.push('/es/auth/login')}>
-              {t('login')}
+              Ingresar
             </Button>
           </div>
         </div>
@@ -51,28 +47,28 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                   <Zap className="w-4 h-4" />
-                  <span className="text-sm font-semibold">{t('taglineUnlimited')}</span>
+                  <span className="text-sm font-semibold">Productividad sin límites</span>
                 </div>
                 <h1 className="text-6xl sm:text-7xl font-bold text-slate-900 dark:text-white leading-tight">
-                  {t('heroTitle')}
+                  Enriquece tus tareas
                 </h1>
                 <p className="text-xl text-slate-600 dark:text-slate-400 max-w-lg">
-                  {t('heroDesc')}
+                  La plataforma más simple para gestionar, organizar y automatizar tus proyectos. Todo lo que necesitas en un solo lugar.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 <Button size="lg" icon={<ArrowRight className="w-5 h-5" />} iconPosition="right" onClick={() => router.push('/es/auth/signup')}>
-                  {t('signUp')}
+                  Comienza gratis
                 </Button>
                 <Button variant="outline" size="lg" onClick={() => router.push('/es/auth/login')}>
-                  {t('demo')}
+                  Demostración
                 </Button>
               </div>
 
               <div className="pt-8 border-t border-slate-200 dark:border-slate-800">
                 <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                  {t('trustUsers')}
+                  Más de <span className="font-semibold text-slate-900 dark:text-white">5,000 equipos</span> en 50 países confían en Task Enrich
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
@@ -125,20 +121,20 @@ export default function HomePage() {
       <section id="features" className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t('mainFeatures')}</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Características principales</h2>
             <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-              {t('mainFeaturesDesc')}
+              Herramientas poderosas diseñadas para simplificar tu flujo de trabajo
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
-              { icon: Zap, titleKey: 'featureFast', descKey: 'featureFastDesc' },
-              { icon: CheckCircle, titleKey: 'featureSimple', descKey: 'featureSimpleDesc' },
-              { icon: Rocket, titleKey: 'featurePowerful', descKey: 'featurePowerfulDesc' },
-              { icon: Users, titleKey: 'featureCollab', descKey: 'featureCollabDesc' },
-              { icon: BarChart3, titleKey: 'featureAnalytics', descKey: 'featureAnalyticsDesc' },
-              { icon: Shield, titleKey: 'featureSecure', descKey: 'featureSecureDesc' },
+              { icon: Zap, title: 'Súper rápido', desc: 'Carga instantánea con rendimiento optimizado' },
+              { icon: CheckCircle, title: 'Simple', desc: 'Interfaz intuitiva sin complicaciones' },
+              { icon: Rocket, title: 'Potente', desc: 'Herramientas avanzadas cuando las necesites' },
+              { icon: Users, title: 'Colaborativo', desc: 'Trabaja con tu equipo en tiempo real' },
+              { icon: BarChart3, title: 'Analytics', desc: 'Datos y métricas para tomar decisiones' },
+              { icon: Shield, title: 'Seguro', desc: 'Encriptación de grado empresarial' },
             ].map((f, i) => {
               const Icon = f.icon
               return (
@@ -149,8 +145,8 @@ export default function HomePage() {
                   <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">{t(f.titleKey)}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">{t(f.descKey)}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">{f.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">{f.desc}</p>
                 </div>
               )
             })}
@@ -160,15 +156,15 @@ export default function HomePage() {
           <div className="bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-950/20 dark:to-emerald-950/20 rounded-2xl p-12 border border-blue-200 dark:border-blue-800">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('autoTitle')}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Automatización inteligente</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-6">
-                  {t('autoDesc')}
+                  Automatiza tareas repetitivas y ahorra horas cada semana. Define reglas simples y deja que Task Enrich haga el trabajo.
                 </p>
                 <ul className="space-y-3">
-                  {['autoWorkflows', 'autoTriggers', 'autoIntegrations'].map((key, i) => (
+                  {['Flujos automatizados', 'Triggers personalizados', 'Integraciones'].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
                       <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                      {t(key)}
+                      {item}
                     </li>
                   ))}
                 </ul>
@@ -189,29 +185,30 @@ export default function HomePage() {
       <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t('pricingTitle')}</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Planes simples y transparentes</h2>
             <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-              {t('pricingDesc')}
+              Elige el plan perfecto para tu equipo
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                planKey: 'starterPlan',
-                priceKey: 'starterPrice',
-                featureKeys: ['starterFeature1', 'starterFeature2', 'starterFeature3', 'starterFeature4']
+                name: 'Starter',
+                price: 'Gratis',
+                features: ['Hasta 10 tareas', 'Acceso básico', 'Email support', '1 usuario']
               },
               {
-                planKey: 'proPlan',
-                priceKey: 'proPrice',
-                featureKeys: ['proFeature1', 'proFeature2', 'proFeature3', 'proFeature4', 'proFeature5', 'proFeature6'],
+                name: 'Professional',
+                price: '$9',
+                period: '/mes',
+                features: ['Tareas ilimitadas', 'Automatización', 'Integrations', 'Hasta 5 usuarios', 'Analytics', 'Chat support'],
                 highlighted: true
               },
               {
-                planKey: 'enterprisePlan',
-                priceKey: 'enterprisePrice',
-                featureKeys: ['enterpriseFeature1', 'enterpriseFeature2', 'enterpriseFeature3', 'enterpriseFeature4', 'enterpriseFeature5']
+                name: 'Enterprise',
+                price: 'Custom',
+                features: ['Todo en Professional', 'SLA garantizado', 'Dedicated support', 'SSO', 'Custom integrations']
               }
             ].map((plan, i) => (
               <div
@@ -223,12 +220,10 @@ export default function HomePage() {
                 }`}
               >
                 <div className="p-8">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{t(plan.planKey)}</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{plan.name}</h3>
                   <div className="mb-6">
-                    <span className="text-4xl font-bold text-slate-900 dark:text-white">{t(plan.priceKey)}</span>
-                    {(plan.planKey !== 'starterPlan' && plan.planKey !== 'enterprisePlan') && (
-                      <span className="text-slate-600 dark:text-slate-400">{t('period')}</span>
-                    )}
+                    <span className="text-4xl font-bold text-slate-900 dark:text-white">{plan.price}</span>
+                    {plan.period && <span className="text-slate-600 dark:text-slate-400">{plan.period}</span>}
                   </div>
                   <Button
                     variant={plan.highlighted ? 'primary' : 'outline'}
@@ -236,13 +231,13 @@ export default function HomePage() {
                     className="w-full mb-8"
                     onClick={() => router.push('/es/auth/signup')}
                   >
-                    {t('ctaButtonText')}
+                    Comenzar
                   </Button>
                   <ul className="space-y-3">
-                    {plan.featureKeys.map((featureKey, j) => (
+                    {plan.features.map((feature, j) => (
                       <li key={j} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                         <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                        {t(featureKey)}
+                        {feature}
                       </li>
                     ))}
                   </ul>
@@ -257,25 +252,37 @@ export default function HomePage() {
       <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{t('faqTitle')}</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Preguntas frecuentes</h2>
             <p className="text-xl text-slate-600 dark:text-slate-400">
-              {t('faqSubtitle')}
+              Respuestas a las preguntas más comunes
             </p>
           </div>
 
           <div className="space-y-4">
             {[
-              { qKey: 'faqQ1', aKey: 'faqA1' },
-              { qKey: 'faqQ2', aKey: 'faqA2' },
-              { qKey: 'faqQ3', aKey: 'faqA3' },
-              { qKey: 'faqQ4', aKey: 'faqA4' }
+              {
+                q: '¿Cuáles son las limitaciones del plan gratuito?',
+                a: 'El plan gratuito incluye hasta 10 tareas, 1 usuario y acceso básico a todas las características. Es perfecto para empezar.'
+              },
+              {
+                q: '¿Puedo cambiar de plan en cualquier momento?',
+                a: 'Sí, puedes actualizar o cambiar tu plan en cualquier momento. Los cambios se aplican al próximo período de facturación.'
+              },
+              {
+                q: '¿Ofrecen soporte?',
+                a: 'Sí, todos nuestros planes incluyen soporte por email. El plan Professional incluye chat support prioritario.'
+              },
+              {
+                q: '¿Es segura mi información?',
+                a: 'Utilizamos encriptación de grado empresarial (AES-256) y cumplimos con GDPR. Tu información está 100% segura.'
+              }
             ].map((item, i) => (
               <details key={i} className="group border border-slate-200 dark:border-slate-800 rounded-lg p-6 cursor-pointer hover:border-blue-500 dark:hover:border-blue-600 transition-colors">
                 <summary className="flex items-center justify-between font-semibold text-slate-900 dark:text-white">
-                  <span>{t(item.qKey)}</span>
+                  <span>{item.q}</span>
                   <span className="transition-transform group-open:rotate-180">▼</span>
                 </summary>
-                <p className="text-slate-600 dark:text-slate-400 mt-4">{t(item.aKey)}</p>
+                <p className="text-slate-600 dark:text-slate-400 mt-4">{item.a}</p>
               </details>
             ))}
           </div>
@@ -287,10 +294,10 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-blue-600 to-emerald-600 dark:from-blue-700 dark:to-emerald-700 rounded-3xl p-12 sm:p-16 text-center text-white shadow-2xl">
             <h2 className="text-4xl sm:text-5xl font-bold mb-6">
-              {t('ctaTitle')}
+              Comienza hoy, sin tarjeta de crédito
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              {t('ctaDesc')}
+              Prueba todas las características del plan Professional durante 14 días de forma completamente gratuita
             </p>
             <Button
               size="lg"
@@ -300,7 +307,7 @@ export default function HomePage() {
               className="bg-white hover:bg-slate-100 text-slate-900"
               onClick={() => router.push('/es/auth/signup')}
             >
-              {t('ctaButton')}
+              Crear cuenta gratis
             </Button>
           </div>
         </div>
@@ -313,41 +320,41 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Rocket className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <span className="font-bold text-slate-900 dark:text-white">{t('appName')}</span>
+                <span className="font-bold text-slate-900 dark:text-white">Task Enrich</span>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t('footerDesc')}
+                La plataforma más simple para gestionar tus proyectos
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">{t('footerProduct')}</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">Producto</h4>
               <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-                <li><a href="#features" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('navFeatures')}</a></li>
-                <li><a href="#pricing" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('navPricing')}</a></li>
-                <li><a href="#faq" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('navFAQ')}</a></li>
+                <li><a href="#features" className="hover:text-slate-900 dark:hover:text-white transition-colors">Features</a></li>
+                <li><a href="#pricing" className="hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#faq" className="hover:text-slate-900 dark:hover:text-white transition-colors">FAQ</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">{t('footerCompany')}</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">Empresa</h4>
               <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerBlog')}</a></li>
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerContact')}</a></li>
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerCareers')}</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Contacto</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Careers</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">{t('footerLegal')}</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerPrivacy')}</a></li>
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerTerms')}</a></li>
-                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footerCookies')}</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacidad</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Términos</a></li>
+                <li><a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Cookies</a></li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-slate-200 dark:border-slate-800 pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
-              <p>{t('footerCopyright')}</p>
+              <p>© 2026 Task Enrich. Todos los derechos reservados.</p>
               <div className="flex gap-6">
                 <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Twitter</a>
                 <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">LinkedIn</a>
@@ -358,5 +365,5 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

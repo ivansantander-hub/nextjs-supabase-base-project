@@ -1,9 +1,5 @@
 import { ReactNode } from 'react';
-
-export const generateStaticParams = () => [
-  { locale: 'es' },
-  { locale: 'en' },
-];
+import { I18nProvider } from '@/contexts/I18nContext';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -14,5 +10,11 @@ export default async function LocaleLayout({
   children,
   params,
 }: LocaleLayoutProps) {
-  return children;
+  const { locale } = await params;
+
+  return (
+    <I18nProvider initialLocale={locale as 'es' | 'en'}>
+      {children}
+    </I18nProvider>
+  );
 }

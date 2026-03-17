@@ -1,19 +1,25 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useTranslations } from '@/contexts/I18nContext';
 import { ForgotPasswordForm } from '@/components/molecules/ForgotPasswordForm';
 import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
+import { LanguageSelector } from '@/components/atoms/LanguageSelector';
 import { ArrowLeft, Mail } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('auth');
   const params = useParams();
   const locale = (params?.locale as string) || 'es';
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 overflow-hidden">
-      {/* Theme Switcher */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Header Controls */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-4">
+        <LanguageSelector />
         <ThemeSwitcher />
       </div>
 
@@ -33,7 +39,7 @@ export default function ForgotPasswordPage() {
               className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              Volver al login
+              {t('backToLogin')}
             </Link>
 
             {/* Header */}
@@ -42,10 +48,10 @@ export default function ForgotPasswordPage() {
                 <Mail className="w-6 h-6 text-white" />
               </div>
               <h1 className="mt-6 text-4xl font-bold text-slate-900 dark:text-white">
-                Recuperar acceso
+                {t('recoverAccess')}
               </h1>
               <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
-                Te enviaremos un enlace para resetear tu contraseña
+                {t('sendResetEmail')}
               </p>
             </div>
 
@@ -54,18 +60,18 @@ export default function ForgotPasswordPage() {
               {[
                 {
                   step: '1',
-                  title: 'Ingresa tu email',
-                  description: 'La dirección de correo asociada a tu cuenta',
+                  title: t('enterEmail'),
+                  description: t('emailAssociated'),
                 },
                 {
                   step: '2',
-                  title: 'Recibe el enlace',
-                  description: 'Te enviaremos un correo con instrucciones para resetear tu contraseña',
+                  title: t('receiveLink'),
+                  description: t('sendEmailInstructions'),
                 },
                 {
                   step: '3',
-                  title: 'Crea nueva contraseña',
-                  description: 'Sigue el enlace en el correo y crea una contraseña nueva y segura',
+                  title: t('createNewPassword'),
+                  description: t('followEmailLink'),
                 },
               ].map((item) => (
                 <div key={item.step} className="flex items-start gap-4">
@@ -87,7 +93,7 @@ export default function ForgotPasswordPage() {
             {/* Note */}
             <div className="pt-8 border-t border-slate-200 dark:border-slate-700">
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                📧 Si no recibes el correo en los próximos minutos, revisa tu carpeta de spam o intenta nuevamente.
+                {t('checkSpamFolder')}
               </p>
             </div>
           </div>
@@ -102,7 +108,7 @@ export default function ForgotPasswordPage() {
                 className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
-                Volver
+                {t('back')}
               </Link>
             </div>
             <ForgotPasswordForm />

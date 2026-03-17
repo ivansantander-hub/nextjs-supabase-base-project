@@ -1,18 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from '@/contexts/I18nContext';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useAuth } from '@/hooks/useAuth';
 import { Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
 
-interface SignupFormProps {
+export interface SignupFormProps {
   onSuccess?: () => void;
 }
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
+  const t = useTranslations('auth');
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || 'es';
   const { signUp, loading, error } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -41,21 +45,21 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setFormError(null);
 
     if (!email || !password) {
-      setFormError('Por favor completa los campos requeridos');
+      setFormError(t('requiredFieldsSignup'));
       return;
     }
 
     if (password.length < 6) {
-      setFormError('La contraseña debe tener al menos 6 caracteres');
+      setFormError(t('passwordMinLength'));
       return;
     }
 
     const { success, error } = await signUp(email, password, fullName);
     if (success) {
       if (onSuccess) onSuccess();
-      router.push('/es/dashboard');
+      router.push(`/${locale}/dashboard`);
     } else {
-      setFormError(error?.message || 'Error al registrarse');
+      setFormError(error?.message || t('errors.signupFailed'));
     }
   };
 
@@ -68,9 +72,9 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
 
   const getPasswordStrengthText = () => {
     if (passwordStrength === 0) return '';
-    if (passwordStrength <= 2) return 'Contraseña débil';
-    if (passwordStrength <= 3) return 'Contraseña media';
-    return 'Contraseña fuerte';
+    if (passwordStrength <= 2) return t('weakPassword');
+    if (passwordStrength <= 3) return t('mediumPassword');
+    return t('strongPassword');
   };
 
   return (
@@ -78,10 +82,10 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       {/* Header */}
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Crear cuenta
+          {t('createAccountText')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          Únete a nuestra plataforma hoy
+          {t('joinPlatform')}
         </p>
       </div>
 
@@ -102,12 +106,12 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           type="text"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          placeholder="Juan Pérez"
+          placeholder="John Doe"
           disabled={loading}
-          label="Nombre completo (opcional)"
+          label={t('fullNameOptional')}
           icon={<User className="w-5 h-5" />}
           iconPosition="left"
-          hint="Nos ayuda a personalizarte la experiencia"
+          hint={t('helpPersonalize')}
         />
       </div>
 
@@ -118,9 +122,9 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tú@ejemplo.com"
+          placeholder="your@email.com"
           disabled={loading}
-          label="Correo electrónico"
+          label={t('email')}
           icon={<Mail className="w-5 h-5" />}
           iconPosition="left"
           required
@@ -136,10 +140,10 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           onChange={handlePasswordChange}
           placeholder="••••••••"
           disabled={loading}
-          label="Contraseña"
+          label={t('password')}
           icon={<Lock className="w-5 h-5" />}
           iconPosition="left"
-          hint="Mínimo 6 caracteres"
+          hint={t('minSixChars')}
           required
         />
 
@@ -176,7 +180,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         isLoading={loading}
         className="w-full mt-8"
       >
-        {loading ? 'Registrando...' : 'Crear cuenta'}
+        {loading ? t('registerLoading') : t('registerButton')}
       </Button>
 
       {/* Divider */}
@@ -186,7 +190,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">
-            ¿Ya tienes cuenta?
+            {t('haveAccount')}
           </span>
         </div>
       </div>
@@ -197,14 +201,14 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         variant="outline"
         size="lg"
         className="w-full"
-        onClick={() => router.push('/es/auth/login')}
+        onClick={() => router.push(`/${locale}/auth/login`)}
       >
-        Iniciar sesión
+        {t('signInButton')}
       </Button>
 
       {/* Footer */}
       <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-        Al registrarte, aceptas nuestros términos de servicio y política de privacidad
+        {t('termsTextSignup')}
       </p>
     </form>
   );

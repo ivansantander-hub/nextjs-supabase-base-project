@@ -1,10 +1,4 @@
-import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-
-const intlMiddleware = createIntlMiddleware({
-  locales: ['es', 'en'],
-  defaultLocale: 'es',
-});
 
 // Routes that require authentication
 const PROTECTED_ROUTES = [
@@ -25,7 +19,15 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Extract locale from pathname
-  const pathWithoutLocale = pathname.replace(/^\/(es|en)/, '');
+  const localeMatch = pathname.match(/^\/(es|en)/);
+  const locale = localeMatch ? localeMatch[1] : 'es';
+  const pathWithoutLocale = pathname.replace(/^\/(es|en)/, '') || '/';
+
+  // Validate locale
+  if (!['es', 'en'].includes(locale)) {
+    return NextResponse.redirect(new URL(`/es${pathname}`, request.url));
+  }
+
   const isProtectedRoute = PROTECTED_ROUTES.some(route =>
     pathWithoutLocale.startsWith(route)
   );
@@ -39,7 +41,6 @@ export function middleware(request: NextRequest) {
 
   // If accessing protected route without token, redirect to login
   if ((isProtectedRoute || isRoleRestrictedRoute) && !token) {
-    const locale = pathname.startsWith('/es') ? 'es' : 'en';
     return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.url));
   }
 
@@ -52,8 +53,7 @@ export function middleware(request: NextRequest) {
   // This basic implementation assumes roles would be checked on the client side
   // For full RBAC, implement JWT decoding and role validation here
 
-  // Apply i18n middleware
-  return intlMiddleware(request);
+  return NextResponse.next();
 }
 
 export const config = {
