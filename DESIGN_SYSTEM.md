@@ -1,312 +1,272 @@
-# 🎨 Design System - Task Enrichment Platform
+# Design System - Next.js + Supabase Boilerplate
 
-## Diseño Minimalista & Simple (v2.0)
+Sistema de diseño limpio y minimalista incluido en este boilerplate. Está completamente configurado en Tailwind CSS.
 
-Este documento describe el sistema de diseño limpio, minimalista y simple de Task Enrich.
+## 🎨 Paleta de Colores
 
----
+### Variables CSS Globales
 
-## 📋 Cambios Implementados
+```css
+/* Light Mode */
+--primary: #7c3aed (Violeta)
+--primary-light: #a78bfa
+--background: #ffffff
+--surface: #f8fafc (Slate 50)
+--text: #0f172a (Slate 900)
+--text-secondary: #64748b (Slate 500)
+--border: #e2e8f0 (Slate 200)
 
-### 1. **Sistema de Colores Global** (`globals.css`)
-
-#### Light Mode
-- **Primary**: Azul eléctrico (#0066ff) → Violeta (#7c3aed)
-- **Backgrounds**: Blanco a Gris claro profesional
-- **Text**: Slate 900 (principal) → Slate 500 (secundario)
-- **Borders**: Slate 200 con transiciones suaves
-
-#### Dark Mode
-- **Primary**: Azul brillante (#3b82f6) → Violeta lavanda (#a78bfa)
-- **Backgrounds**: Slate 900 a Slate 800
-- **Text**: Slate 50 (principal) con buen contraste
+/* Dark Mode */
+--primary: #a78bfa (Violeta lavanda)
+--background: #0f172a (Slate 900)
+--surface: #1e293b (Slate 800)
+--text: #f1f5f9 (Slate 50)
+--border: #334155 (Slate 700)
+```
 
 **Características:**
-- ✅ Paleta de colores coherente y profesional
-- ✅ Soporte completo de tema claro/oscuro
-- ✅ Transiciones suaves 300ms entre temas
 - ✅ Contraste WCAG AA+ en todos los estados
+- ✅ Transiciones suaves 300ms entre temas
+- ✅ Sistema de colores coherente
 
----
+## 📝 Tipografía
 
-### 2. **Tipografía Premium**
-
-```css
-Display Font: "Playfair Display" (headings)
-Body Font: "Sora" (body, ui elements)
-Mono Font: "Monaco" (code)
+```
+Display Font:  Playfair Display (headings)
+Body Font:     Sora (body, UI)
+Mono Font:     Monaco (code)
 ```
 
-**Beneficios:**
-- Tipografía distinctive y memorable
-- Jerarquía visual clara
-- Excelente legibilidad en todos los tamaños
-- Compatible con responsive design
+### Jerarquía de Tamaños
 
----
+| Elemento | Tamaño | Peso |
+|----------|--------|------|
+| h1 | 2.5rem | 700 |
+| h2 | 2rem | 700 |
+| h3 | 1.5rem | 600 |
+| body | 1rem | 400 |
+| small | 0.875rem | 400 |
 
-### 3. **Componentes Mejorados**
+## 🎯 Componentes Base
 
-#### Button Component
-```tsx
-✨ Características Nuevas:
-- 5 variantes: primary, secondary, outline, ghost, danger
-- 3 tamaños: sm, md, lg
-- Gradiente dinámico en botones primarios
-- Hover state con elevación (shadow + translateY)
-- Active state con escala (0.95)
+### Button
+
+**Variantes:** primary, secondary, outline, ghost, danger
+**Tamaños:** sm, md, lg
+**Features:**
+- Gradiente dinámico en primarios
+- Hover states con elevación
+- Active states con escala
 - Loading states con spinner
-- Transiciones suaves 200ms
-- Focus ring accesible
+- Focus rings accesibles
+
+```tsx
+// Uso
+<Button variant="primary" size="md">Click me</Button>
+<Button variant="outline">Outlined</Button>
+<Button disabled>Disabled</Button>
 ```
 
-#### Input Component
-```tsx
-✨ Características Nuevas:
-- Focus ring azul con shadow suave
+### Input
+
+**Features:**
+- Focus ring con shadow suave
 - Estados hover mejorados
-- Soporte para iconos (left/right)
-- Indicador visual de error en rojo
-- Hints y helper text
-- Transiciones suaves en todos los estados
-- Accesibilidad mejorada
-```
+- Soporte para iconos left/right
+- Indicador visual de error
+- Helper text y hints
 
-#### SignupForm
 ```tsx
-✨ Características Nuevas:
-- Indicador de fortaleza de contraseña en tiempo real
-- 5 niveles: débil → fuerte
-- Validación visual inmediata
-- Iconos de Lucide (User, Mail, Lock)
-- Errores animados (slideInDown)
-- Layout mejorado con dividers
-- Hint text para cada campo
+// Uso
+<Input
+  type="email"
+  placeholder="user@example.com"
+  icon="mail"
+/>
 ```
 
-#### LoginForm
+### Card
+
+Contenedor flexible para organizar contenido.
+
 ```tsx
-✨ Características Nuevas:
-- Diseño limpio y profesional
-- Iconos contextuales en inputs
-- Mensajes de error destacados
-- Transiciones suaves entre estados
-- Link a signup mejorado
+<Card className="p-6">
+  <h3>Card Title</h3>
+  <p>Card content</p>
+</Card>
 ```
 
----
+## ✨ Animaciones
 
-### 4. **Páginas Rediseñadas**
-
-#### Login Page (`/auth/login`)
-- Layout split desktop (features left, form right)
-- Animated backgrounds con gradientes suaves
-- Feature cards con hover effects
-- Testimonial section
-- Mobile: single column responsive
-- Animación fade-in en carga
-
-#### Signup Page (`/auth/signup`)
-- Diseño asimétrico (form left, benefits right)
-- Password strength indicator visual
-- 6 beneficios con checkmarks
-- Social proof (5000+ usuarios)
-- Animaciones staggered
-- Totalmente responsive
-
-#### Dashboard Page
-- Header sticky con logout button
-- Stats cards con hover effects (-translate-y-1)
-- Profile card con avatar gradient
-- Success badge animada
-- Coming soon section
-- Loading state con spinner animado
-
----
-
-### 5. **Animaciones y Transiciones**
+### Duraciones Estándar
 
 ```css
-Duraciones Estándar:
 --duration-fast:  150ms
 --duration-base:  200ms
 --duration-slow:  300ms
-
-Easing Functions:
---ease-in:      cubic-bezier(0.4, 0, 1, 1)
---ease-out:     cubic-bezier(0, 0, 0.2, 1)
---ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1)
-
-Animaciones Disponibles:
-- fadeIn (opacity 0→1)
-- slideInUp (translate -12px, opacity 0→1)
-- slideInDown (translate +12px, opacity 0→1)
-- scaleIn (scale 0.95→1, opacity 0→1)
-- shimmer (loading effect)
-- pulse-ring (focus effect)
 ```
 
----
-
-### 6. **Estados Interactivos**
-
-#### Button States
-- **Default**: Color de fondo gradiente
-- **Hover**: Sombra mayor + translate -2px
-- **Active**: Escala 0.95
-- **Disabled**: Opacidad 50%, cursor not-allowed
-- **Focus**: Ring azul 2px offset 2px
-
-#### Input States
-- **Default**: Borde slate-200
-- **Hover**: Borde slate-300
-- **Focus**: Borde blue-500 + ring azul
-- **Error**: Borde rojo, ring rojo
-- **Disabled**: Opacidad 50%, fondo gris
-
-#### Card States (Hover)
-- Elevación aumenta (shadow-lg)
-- Traslación -4px en Y
-- Transición suave 300ms
-
----
-
-### 7. **Responsividad**
+### Animaciones Disponibles
 
 ```css
-Breakpoints:
-- Mobile:  < 640px (full width, single column)
-- Tablet:  640-1024px (2 columns)
-- Desktop: > 1024px (3+ columns, layouts split)
-
-Features:
-- Mobile-first approach
-- Tipografía responsive (h1: 1.875rem → 2.5rem)
-- Padding adaptativo
-- Imágenes responsive
-- Touch-friendly (44x44px mínimo)
+fadeIn        → opacity 0 → 1
+slideInUp     → translateY -12px, opacity 0 → 1
+slideInDown   → translateY +12px, opacity 0 → 1
+scaleIn       → scale 0.95 → 1, opacity 0 → 1
+shimmer       → Loading effect
+pulse-ring    → Focus effect
 ```
 
----
-
-### 8. **Accesibilidad**
-
-✅ **WCAG 2.1 AA Compliant**
-- Contraste de color ≥ 4.5:1
-- Focus rings visibles (2-4px)
-- Aria-labels en botones de ícono
-- Keyboard navigation completa
-- Estructura semántica HTML
-- Alt text en imágenes
-- Soporte para prefers-reduced-motion
-
----
-
-### 9. **Dark Mode Implementation**
+## 🌙 Dark Mode
 
 - ✅ Automático según system preferences
 - ✅ Manual toggle disponible (next-themes)
-- ✅ Transiciones suaves 300ms
-- ✅ Colores adaptados para ambos modos
-- ✅ Sombras más fuertes en dark mode
+- ✅ Transiciones suaves
+- ✅ Colores optimizados para ambos modos
 
----
+**Configuración en código:**
 
-## 📁 Archivos Modificados
+```tsx
+// Usar next-themes
+import { useTheme } from 'next-themes'
 
-```
-src/app/
-├── globals.css                    ← Sistema de colores, animaciones, utilidades
-├── layout.tsx                     ← Meta tags de tema
-└── [locale]/
-    ├── layout.tsx                ← ThemeProvider configurado
-    ├── auth/
-    │   ├── login/page.tsx         ← Página login rediseñada
-    │   └── signup/page.tsx        ← Página signup rediseñada
-    └── dashboard/page.tsx         ← Dashboard premium
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
 
-src/components/
-├── atoms/
-│   ├── Button.tsx                 ← Botones con 5 variantes
-│   ├── Input.tsx                  ← Inputs mejorados
-│   ├── Card.tsx                   ← Component Card reutilizable (NEW)
-│   └── Badge.tsx                  ← Component Badge mejorado (NEW)
-└── molecules/
-    ├── LoginForm.tsx              ← Form mejorado
-    └── SignupForm.tsx             ← Form con strength indicator
+  return (
+    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+      Toggle
+    </button>
+  )
+}
 ```
 
----
+## 📱 Responsividad
 
-## 🎯 Características Destacadas
+```css
+Mobile:   < 640px   (full width)
+Tablet:   640-1024px (2 columns)
+Desktop:  > 1024px   (3+ columns)
+```
 
-### Inspiración Awwwards
-- ✨ Paleta de colores sofisticada y coherente
-- ✨ Tipografía distinctive (Playfair Display + Sora)
-- ✨ Animaciones con propósito (no decorativas)
-- ✨ Espaciado consistente (8px system)
-- ✨ Micro-interacciones pulidas
-- ✨ Transiciones suaves sin brusquedad
-- ✨ Gradientes sutiles pero impactantes
-- ✨ Hover states intuitivos
+**Enfoque:** Mobile-first
+**Tipografía responsive:** h1 grows de 1.875rem → 2.5rem
+**Touch targets:** Mínimo 44x44px
 
-### Usabilidad
-- ✅ Botones con feedback visual inmediato
-- ✅ Inputs con validación en tiempo real
-- ✅ Indicador de fortaleza de contraseña
-- ✅ Error messages claros y contextuales
-- ✅ Loading states con spinner
-- ✅ Accesibilidad mejorada
+## ♿ Accesibilidad
 
----
+**WCAG 2.1 AA Compliant:**
+- ✅ Contraste ≥ 4.5:1
+- ✅ Focus rings visibles
+- ✅ Aria-labels en iconos
+- ✅ Keyboard navigation completa
+- ✅ HTML semántico
+- ✅ Soporte prefers-reduced-motion
 
-## 🚀 Próximos Pasos Sugeridos
+## 🔧 Personalización
 
-1. **Componentes adicionales:**
-   - Modal/Dialog premium
-   - Tooltip con animaciones
-   - Dropdown mejorado
-   - Toast notifications
+### Cambiar colores primarios
 
-2. **Páginas:**
-   - Landing page extraordinaria
-   - Página de 404 diseñada
-   - Settings page
-   - Profile page
+En `src/app/globals.css`:
 
-3. **Optimizaciones:**
-   - Lazy loading de iconos
-   - CSS optimizado para production
-   - Image optimization
-   - Font optimization
+```css
+:root {
+  --primary: #tu-color-aqui;
+  --primary-light: #variante-clara;
+}
 
----
+[data-theme="dark"] {
+  --primary: #tu-color-oscuro;
+}
+```
 
-## 📊 Métricas de Diseño
+### Cambiar tipografía
+
+En `src/app/layout.tsx`:
+
+```tsx
+// Importar Google Fonts
+import { YourFont } from 'next/font/google'
+
+const font = YourFont({ subsets: ['latin'] })
+
+export default function RootLayout() {
+  return (
+    <html className={font.className}>
+      {/* ... */}
+    </html>
+  )
+}
+```
+
+## 📐 Sistema de Espaciado
+
+Basado en múltiplos de 8px (escala 8pt):
+
+```
+2px   = 0.125rem
+4px   = 0.25rem
+8px   = 0.5rem
+12px  = 0.75rem
+16px  = 1rem
+20px  = 1.25rem
+24px  = 1.5rem
+```
+
+## 🎬 Estados de Componentes
+
+### Botones
+
+| Estado | Cambio |
+|--------|--------|
+| Default | Color base |
+| Hover | Shadow mayor + translate -2px |
+| Active | Scale 0.95 |
+| Disabled | Opacity 50% |
+| Focus | Blue ring 2px |
+
+### Inputs
+
+| Estado | Cambio |
+|--------|--------|
+| Default | Borde slate-200 |
+| Hover | Borde slate-300 |
+| Focus | Blue ring + borde blue |
+| Error | Borde rojo |
+| Disabled | Opacity 50% |
+
+### Cards
+
+| Estado | Cambio |
+|--------|--------|
+| Default | Shadow base |
+| Hover | Shadow lg + translateY -4px |
+
+## 🚀 Archivos Relevantes
+
+```
+src/
+├── app/globals.css        ← Estilos globales y variables CSS
+├── app/layout.tsx         ← Tema setup con next-themes
+└── components/
+    ├── atoms/Button.tsx   ← Componente botón
+    ├── atoms/Input.tsx    ← Componente input
+    └── atoms/Card.tsx     ← Componente card
+```
+
+## 📊 Resumen
 
 | Métrica | Valor |
 |---------|-------|
-| Color Palette | 12 colores + gradientes |
+| Color Palette | 12 colores base + gradientes |
 | Font Pairings | 2 (Display + Body) |
-| Animation Durations | 3 estándar (150ms, 200ms, 300ms) |
+| Animation Speeds | 3 (150ms, 200ms, 300ms) |
 | Breakpoints | 3 (mobile, tablet, desktop) |
-| Contrast Ratio | 4.5:1 - 7:1 (WCAG AA+) |
-| Button Variants | 5 (primary, secondary, outline, ghost, danger) |
-| Input States | 5 (default, hover, focus, error, disabled) |
+| Min Contrast | 4.5:1 (WCAG AA) |
+| Button Variants | 5 |
+| Input States | 5 |
 
 ---
 
-## 💻 Deployment Ready
-
-- ✅ Turbopack activo y optimizado
-- ✅ Tailwind CSS 4 configurado
-- ✅ Dark mode completamente funcional
-- ✅ Responsive en todos los dispositivos
-- ✅ Accesibilidad WCAG AA+
-- ✅ Performance optimizado
-
----
-
-**Design System Versión**: 1.0
-**Última Actualización**: 2026-03-16
+**Design System Version**: 1.0
 **Status**: ✅ Producción Ready

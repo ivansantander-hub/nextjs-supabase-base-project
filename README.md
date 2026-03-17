@@ -1,85 +1,213 @@
-# Technical Product Owner Platform
+# Next.js 16 + Supabase Boilerplate
 
-> Plataforma para enriquecer tareas de Notion con análisis técnico de GitLab usando Claude API
+Un boilerplate minimalista y moderno para construir aplicaciones con **Next.js 16**, **Supabase Authentication** y **Tailwind CSS**.
 
-**Status**: FASE 1 ✅ COMPLETADA
+## 🚀 Características
 
-## 📚 Documentación
+- ✅ **Next.js 16** con App Router y Turbopack (hot reload < 3s)
+- ✅ **Autenticación Supabase** integrada (email/password, social login ready)
+- ✅ **TypeScript** completo
+- ✅ **Tailwind CSS 4** + sistema de diseño limpio
+- ✅ **Internacionalización** (ES/EN) con `next-intl`
+- ✅ **Dark Mode** con `next-themes`
+- ✅ **Estado global** con Zustand (5 stores preconfigurados)
+- ✅ **Componentes reutilizables** (atoms, molecules, con shadcn/ui)
+- ✅ **Testing** (Vitest + Testing Library)
+- ✅ **Responsive Design** mobile-first
 
-**→ [VE A docs/plan/README.md](./docs/plan/README.md) PARA TODA LA DOCUMENTACIÓN**
+## 📦 Stack
 
-La documentación está completamente organizada por fases. Empieza por:
+| Capa | Tecnología |
+|------|-----------|
+| **Frontend** | Next.js 16, React 19, TypeScript |
+| **Build** | Turbopack |
+| **Estilos** | Tailwind CSS 4, next-themes |
+| **UI** | shadcn/ui (18+ componentes) |
+| **Estado** | Zustand |
+| **i18n** | next-intl (ES, EN) |
+| **Base de datos** | Supabase PostgreSQL |
+| **Auth** | Supabase Auth |
+| **Testing** | Vitest + Testing Library |
 
-1. **[docs/plan/README.md](./docs/plan/README.md)** - Índice maestro
-2. **[docs/plan/fase-0-diseño/00-STATUS.md](./docs/plan/fase-0-diseño/00-STATUS.md)** - Estado del proyecto
-3. **[docs/plan/fase-1-setup/01-PROGRESS.md](./docs/plan/fase-1-setup/01-PROGRESS.md)** - FASE 1 checklist
-
-## 🚀 Quick Start
+## ⚡ Quick Start
 
 ```bash
 # Instalar dependencias
 pnpm install
 
-# Iniciar desarrollo (Turbopack)
+# Configurar variables de entorno
+cp .env.example .env.local
+
+# Iniciar servidor de desarrollo
 pnpm dev
-
-# Correr tests
-pnpm test
-
-# Build producción
-pnpm build
 ```
 
-## 📁 Estructura
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## 🔐 Configurar Supabase
+
+1. Crea un proyecto en [supabase.com](https://supabase.com)
+2. Copia las credenciales a `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+3. Las tablas y funciones de autenticación se sincronizarán automáticamente
+
+## 📁 Estructura del Proyecto
 
 ```
 src/
-├── app/              (Next.js 16 app directory)
-├── components/       (Atomic Design)
-│   ├── atoms/       (5 custom atoms)
-│   ├── molecules/   (Ready for Phase 2)
-│   ├── organisms/   (Ready for Phase 3)
-│   ├── templates/   (Ready for Phase 4)
-│   └── ui/          (18 shadcn/ui components)
-├── hooks/           (5 custom hooks)
-├── stores/          (5 Zustand stores)
-└── i18n/            (ES/EN translations)
-
-docs/
-└── plan/            (📖 Documentación por fases)
-    ├── fase-0-diseño/       (✅ Diseño completo)
-    ├── fase-1-setup/        (✅ Setup base completado)
-    ├── fase-2-molecules/    (⏳ Próxima)
-    └── fase-3-8/            (⏳ Futuro)
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Rutas con soporte i18n
+│   │   ├── auth/
+│   │   │   ├── login/     # Página de login
+│   │   │   └── signup/    # Página de registro
+│   │   └── dashboard/     # Dashboard (protegido)
+│   └── globals.css        # Estilos globales
+│
+├── components/
+│   ├── atoms/             # Componentes pequeños (Button, Input, etc.)
+│   ├── molecules/         # Componentes compuestos (Forms, etc.)
+│   ├── organisms/         # Componentes complejos
+│   ├── templates/         # Layouts y templates
+│   └── ui/               # shadcn/ui components
+│
+├── hooks/                 # React hooks personalizados
+├── stores/                # Zustand stores (auth, user, etc.)
+├── lib/                   # Utilidades y helpers
+├── types/                 # TypeScript types y interfaces
+└── i18n/                  # Traducciones (ES, EN)
 ```
 
-## 🛠 Stack
+## 🛠 Desarrollo
 
-- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
-- **Build**: Turbopack (<3s hot reload)
-- **UI**: shadcn/ui (19 components) + 5 custom atoms
-- **State**: Zustand (5 stores)
-- **i18n**: next-intl (ES, EN)
-- **Themes**: next-themes (dark/light)
-- **Testing**: Vitest + Testing Library
-- **Database**: Supabase PostgreSQL
-- **AI**: Claude API (extensible)
+```bash
+# Hot reload con Turbopack (desarrollo)
+pnpm dev
 
-## ✅ FASE 1 Completada
+# Build optimizado
+pnpm build
 
-- ✅ 18 componentes UI
-- ✅ 5 custom atoms
-- ✅ 5 Zustand stores
-- ✅ 5 custom hooks
-- ✅ 43+ test cases
-- ✅ Dark mode + i18n
-- ✅ Responsive design
-- ✅ Turbopack verificado
+# Correr en producción
+pnpm start
 
-**[→ Ver detalles de FASE 1](./docs/plan/fase-1-setup/02-SUMMARY.md)**
+# Tests
+pnpm test
+pnpm test:ui          # Interfaz visual
+pnpm test:coverage    # Coverage report
 
-## 📖 Leer Documentación
+# Linting
+pnpm lint
+```
 
-- **Diseño completo**: [docs/plan/fase-0-diseño/](./docs/plan/fase-0-diseño/)
-- **Implementación FASE 1**: [docs/plan/fase-1-setup/](./docs/plan/fase-1-setup/)
-- **Próximas fases**: [docs/plan/](./docs/plan/)
+## 🎨 Diseño
+
+- **Tipografía**: Playfair Display (headings) + Sora (body)
+- **Colores**: Sistema de 12 colores + gradientes
+- **Animaciones**: Transiciones suaves 150ms-300ms
+- **Responsivo**: Mobile-first (640px, 1024px breakpoints)
+- **Accesibilidad**: WCAG AA+ compliant
+
+### Temas disponibles
+
+- 🌙 Dark Mode automático
+- ☀️ Light Mode
+- 🔄 Sistema automático según preferencias del SO
+
+## 🔑 Variables de Entorno
+
+Copia `.env.example` a `.env.local`:
+
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Opcional - Otros servicios
+NODE_ENV=development
+```
+
+## 📖 Documentación
+
+- **Componentes**: Ver `src/components/` para ejemplos
+- **Hooks**: Ver `src/hooks/` para utilidades
+- **Autenticación**: Revisar `src/lib/auth.ts`
+- **Variables de CSS**: `src/app/globals.css`
+
+## 🚀 Deployment
+
+### Vercel (Recomendado)
+
+```bash
+# Deployment automático desde GitHub
+vercel --prod
+```
+
+### Otros proveedores
+
+```bash
+# Build production
+pnpm build
+
+# Start server
+pnpm start
+```
+
+**Variables de entorno requeridas en producción:**
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+## 🧪 Testing
+
+```bash
+# Correr todos los tests
+pnpm test
+
+# Watch mode
+pnpm test --watch
+
+# Coverage report
+pnpm test:coverage
+```
+
+## ✨ Próximos Pasos
+
+Para usar este boilerplate:
+
+1. **Personaliza el branding**:
+   - Actualiza logos en `public/`
+   - Modifica colores en `src/app/globals.css`
+   - Ajusta tipografía en `src/app/layout.tsx`
+
+2. **Configura Supabase Auth**:
+   - Activa social login en dashboard
+   - Configura email templates
+   - Añade reglas de Row Level Security (RLS)
+
+3. **Extiende funcionalidad**:
+   - Crea nuevas rutas en `src/app/[locale]/`
+   - Añade stores en `src/stores/`
+   - Crea componentes en `src/components/`
+
+4. **Deploy**:
+   - Conecta tu repo a Vercel
+   - Configura variables de entorno
+   - Haz deploy de tu aplicación
+
+## 📝 Licencia
+
+MIT
+
+## 🤝 Contribuciones
+
+Este es un boilerplate base. Siéntete libre de modificarlo para tus necesidades.
+
+---
+
+**Última actualización**: 2026-03-17
+**Status**: ✅ Listo para usar
