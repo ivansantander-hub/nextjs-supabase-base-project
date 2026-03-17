@@ -10,7 +10,7 @@ export function useAuth() {
 
   // Initialize auth state on mount
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
+    let unsubscribe: { unsubscribe: () => void } | undefined;
 
     const initAuth = async () => {
       try {
@@ -34,7 +34,7 @@ export function useAuth() {
 
     return () => {
       if (unsubscribe) {
-        unsubscribe();
+        unsubscribe.unsubscribe();
       }
     };
   }, [setUser, setLoading, setError]);
