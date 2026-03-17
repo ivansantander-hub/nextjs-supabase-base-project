@@ -34,20 +34,24 @@
 - [x] Verificar next.config.js (enabled)
 - [x] Test: `pnpm dev` <3s ✅ TESTEADO Y COMPLETADO
 
-### Paso 4: shadcn/ui Setup
-- [x] Manual setup components.json
-- [x] Crear 18 UI components (button, input, card, dialog, dropdown, select, badge, alert, skeleton, switch, checkbox, radio, textarea, toast, tooltip, popover, label, separator)
-- [x] Crear lib/utils.ts con cn() helper
-- [x] Crear ui/index.ts barrel export
+### Paso 4: Atomic Design Structure
+- [x] Crear carpetas (atoms, molecules, organisms, templates)
+- [x] Crear 5 custom atoms (Button, Input, Text, Icon, Spinner) ⚠️ NO wrappers de shadcn
+- [x] Button atom con loading state
+- [x] Input atom con label, error, hint support
+- [x] Text atom con size/color variants
+- [x] Icon atom con size/color variants
+- [x] Spinner atom con animation
+- [x] Crear atoms/index.ts barrel export
 
 ### Paso 5: Dark Mode (next-themes)
-- [x] Instalar next-themes (next.config + package.json)
+- [x] Instalar next-themes
 - [x] CSS variables (light + dark) en src/app/globals.css
-- [x] Hook useTheme con toggleTheme
-- [x] Integration con authStore para persistencia
-- [x] ✅ **FIXED (2026-03-17)**: `tailwind.config.ts` con `darkMode: 'class'`
-- [x] ✅ **VERIFIED**: 125 selectores `.dark:is(.dark)` compilados correctamente
-- [x] ✅ **TESTED**: Dark mode cambios instantáneos en todos los componentes
+- [x] Crear tailwind.config.ts con `darkMode: 'class'`
+- [x] Agregar `@config` directiva en globals.css
+- [x] ✅ **FIXED (2026-03-17)**: 125 selectores `.dark:is(.dark)` compilados
+- [x] ✅ **VERIFIED**: Dark mode cambios instantáneos
+- [x] ✅ **TESTED**: Persistencia de preferencias
 
 ### Paso 6: i18n (next-intl)
 - [x] Instalar next-intl
@@ -62,16 +66,6 @@
 - [x] useMediaQuery hook (custom implementation)
 - [x] useResponsive helper (isMobile, isTablet, isDesktop)
 - [x] Responsive classes en atoms
-
-### Paso 8: Atomic Design Structure
-- [x] Crear carpetas (atoms, molecules, organisms, templates)
-- [x] Crear 5 custom atoms (Button, Input, Text, Icon, Spinner)
-- [x] Button atom con loading state
-- [x] Input atom con label, error, hint support
-- [x] Text atom con size/color variants
-- [x] Icon atom con size/color variants
-- [x] Spinner atom con animation
-- [x] Crear atoms/index.ts barrel export
 
 ### Paso 9: Zustand Stores
 - [x] authStore.ts (user, token, login/logout)
@@ -120,10 +114,10 @@
 
 ### Completados en FASE 1
 - ✅ Framework y build tools (Next.js 16, React 19, Turbopack)
-- ✅ UI Components (18 shadcn/ui components + 5 custom atoms)
+- ✅ 5 Custom Atoms (Button, Input, Text, Icon, Spinner) - Atomic Design puro
 - ✅ State Management (5 Zustand stores)
 - ✅ Internationalization (ES/EN with URL routing)
-- ✅ Dark/Light Mode (with persistence)
+- ✅ Dark/Light Mode (class-based, working 100%)
 - ✅ Custom Hooks (5 hooks for common functionality)
 - ✅ Testing Infrastructure (Vitest + Testing Library)
 - ✅ Atomic Design Structure (atoms, molecules, organisms, templates folders)

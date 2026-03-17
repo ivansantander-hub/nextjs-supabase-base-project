@@ -18,7 +18,7 @@ interface AuthState {
   setLoading: (loading: boolean) => void;
   setError: (error: Error | null) => void;
   logout: () => void;
-  updateUserPreferences: (preferences: Partial<Pick<User, 'theme_preference' | 'language_preference'>>) => void;
+  updateUserPreferences: (preferences: { theme_preference?: 'light' | 'dark' | 'auto'; language_preference?: 'es' | 'en' }) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
