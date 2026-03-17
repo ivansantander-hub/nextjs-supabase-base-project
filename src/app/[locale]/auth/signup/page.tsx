@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { SignupForm } from '@/components/molecules/SignupForm';
 import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
+import { LanguageSelector } from '@/components/atoms/LanguageSelector';
 import { CheckCircle, Users, Zap, TrendingUp } from 'lucide-react';
 
 export default function SignupPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 overflow-hidden">
-      {/* Theme Switcher */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Header Controls */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-4">
+        <LanguageSelector />
         <ThemeSwitcher />
       </div>
 

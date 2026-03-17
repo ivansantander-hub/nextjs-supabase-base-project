@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useAuth } from '@/hooks/useAuth';
@@ -13,6 +14,8 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || 'es';
   const { signIn, loading, error } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -31,7 +34,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     const { success, error } = await signIn(email, password);
     if (success) {
       if (onSuccess) onSuccess();
-      router.push('/es/dashboard');
+      router.push(`/${locale}/dashboard`);
     } else {
       setFormError(error?.message || 'Error al iniciar sesión');
     }
@@ -79,6 +82,17 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
       {/* Password Input */}
       <div className="relative">
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            Contraseña
+          </label>
+          <Link
+            href={`/${locale}/auth/forgot-password`}
+            className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
         <Input
           id="password"
           type="password"
@@ -88,7 +102,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           onBlur={() => setFocusedField(null)}
           placeholder="••••••••"
           disabled={loading}
-          label="Contraseña"
           icon={<Lock className="w-5 h-5" />}
           iconPosition="left"
           required
@@ -124,7 +137,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         variant="outline"
         size="lg"
         className="w-full"
-        onClick={() => router.push('/es/auth/signup')}
+        onClick={() => router.push(`/${locale}/auth/signup`)}
       >
         Crear cuenta
       </Button>

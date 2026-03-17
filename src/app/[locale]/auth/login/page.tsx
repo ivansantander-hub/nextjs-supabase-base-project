@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { LoginForm } from '@/components/molecules/LoginForm';
 import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
+import { LanguageSelector } from '@/components/atoms/LanguageSelector';
 import { ArrowRight, Zap, Shield, Rocket } from 'lucide-react';
 
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 overflow-hidden">
-      {/* Theme Switcher */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Header Controls */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-4">
+        <LanguageSelector />
         <ThemeSwitcher />
       </div>
 

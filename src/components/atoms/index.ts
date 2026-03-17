@@ -29,3 +29,5 @@ export type { SelectProps, SelectOption } from "./Select"
 
 export { Tabs, TabPanel } from "./Tabs"
 export type { TabsProps, TabItem } from "./Tabs"
+
+export { LanguageSelector } from "./LanguageSelector"
