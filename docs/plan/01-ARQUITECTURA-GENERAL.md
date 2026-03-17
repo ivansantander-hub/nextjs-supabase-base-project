@@ -9,14 +9,15 @@
 ## Tabla de Contenidos
 
 1. [Visión General](#visión-general)
-2. [Componentes Principales](#componentes-principales)
-3. [Arquitectura de Capas](#arquitectura-de-capas)
-4. [Flujo de Datos](#flujo-de-datos)
-5. [Patrones de Diseño](#patrones-de-diseño)
-6. [Manejo de Concurrencia](#manejo-de-concurrencia)
-7. [Cumplimiento ACID](#cumplimiento-acid)
-8. [Decisiones Clave](#decisiones-clave)
-9. [Trade-offs](#trade-offs)
+2. [Requisitos Adicionales Críticos](#requisitos-adicionales-críticos)
+3. [Componentes Principales](#componentes-principales)
+4. [Arquitectura de Capas](#arquitectura-de-capas)
+5. [Flujo de Datos](#flujo-de-datos)
+6. [Patrones de Diseño](#patrones-de-diseño)
+7. [Manejo de Concurrencia](#manejo-de-concurrencia)
+8. [Cumplimiento ACID](#cumplimiento-acid)
+9. [Decisiones Clave](#decisiones-clave)
+10. [Trade-offs](#trade-offs)
 
 ---
 
@@ -30,20 +31,357 @@ Sistema web full-stack que enriquece tareas técnicas de un Product Owner median
 - **Chat interactivo** para ajustes iterativos (MCPs de GitLab y Notion)
 - **Sincronización bidireccional** con Notion con auditoría completa
 
-### Stack Tecnológico
+### Stack Tecnológico (Actualizado con Requisitos Adicionales)
 
 ```
 Frontend:        Next.js 16 + React 19 + TypeScript + TailwindCSS
+                 ⭐ Turbopack (compilador por defecto, <1s hot reload)
+                 ⭐ next-themes (Dark/Light mode dinámico)
+                 ⭐ next-intl (Multilanguage: ES, EN)
+                 ⭐ Responsive Design (Mobile-first, Tablet, Desktop)
+
 Backend:         Next.js API Routes (Serverless) + Edge Middleware
+                 ⭐ AIFactory Pattern (Multi-modelo: Claude, OpenAI, Gemini)
+
 Base de Datos:   Supabase (PostgreSQL con RLS + Real-time)
-IA:              Anthropic Claude API (Haiku/Sonnet para balance)
+                 ⭐ Nueva tabla: ai_providers (multi-modelo config)
+                 ⭐ Nueva tabla: user_preferences (tema, idioma)
+
+IA:              ⭐ Multi-modelo (abstraído por interface)
+                 - Claude (default - Opus/Sonnet/Haiku)
+                 - OpenAI (GPT-4, GPT-4-turbo)
+                 - Google Gemini (Pro, Pro Vision)
+                 - Extensible para otros providers
+
 Integraciones:   Notion API + MCP, GitLab API + MCP
 Autenticación:   Supabase Auth (OAuth + Email)
 ```
 
 ---
 
-## Componentes Principales
+## Requisitos Adicionales Críticos
+
+Estos 5 requisitos han sido integrados en la arquitectura completa:
+
+### 1. 🌓 Dark Mode + Light Mode
+
+**Implementación**:
+- Librería: `next-themes` (recomendada)
+- CSS: Tailwind `dark:` classes + CSS variables
+- Context global: `ThemeProvider` en layout root
+- Base de datos: Campo `theme_preference` en `user_profiles` (light | dark | auto)
+- Cambio dinámico: Sin recargar página, persistencia inmediata
+
+```typescript
+// components/ThemeProvider.tsx
+'use client';
+import { ThemeProvider } from 'next-themes';
+
+export function Providers({ children }) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      {children}
+    </ThemeProvider>
+  );
+}
+
+// Uso en componentes:
+// className="bg-white dark:bg-slate-900 text-black dark:text-white"
+```
+
+**Impacto en Base de Datos**:
+```sql
+ALTER TABLE user_profiles ADD COLUMN theme_preference VARCHAR(10) DEFAULT 'auto';
+-- Valores: 'light', 'dark', 'auto' (respeta prefers-color-scheme del SO)
+```
+
+### 2. 🌍 Multilanguage (i18n) - ES, EN
+
+**Implementación**:
+- Librería: `next-intl` (nativa para Next.js 16)
+- Estructura de URLs: `/es/tasks`, `/en/tasks` (con segment `[locale]`)
+- Archivos de traducción: `src/i18n/messages/es.json`, `src/i18n/messages/en.json`
+- Hook en componentes: `const t = useTranslations()`
+- Base de datos: Campo `language_preference` en `user_profiles` (es | en)
+
+```typescript
+// app/[locale]/layout.tsx
+import { getTranslations } from 'next-intl/server';
+
+export default async function LocaleLayout({ children, params }) {
+  const t = getTranslations();
+
+  return (
+    <html lang={params.locale}>
+      <body>{children}</body>
+    </html>
+  );
+}
+
+// app/[locale]/tasks/page.tsx
+'use client';
+import { useTranslations } from 'next-intl';
+
+export default function TasksPage() {
+  const t = useTranslations('tasks');
+  return <h1>{t('title')}</h1>;
+}
+```
+
+**Backend API**:
+- GET `/api/auth/me` incluye `language_preference`
+- Mensajes de error en idioma del usuario
+- Soporte para cambio dinámico de idioma
+
+**Impacto en Base de Datos**:
+```sql
+ALTER TABLE user_profiles ADD COLUMN language_preference VARCHAR(5) DEFAULT 'es';
+-- Valores: 'es', 'en'
+```
+
+### 3. 📱 Responsive Design (Desktop, Tablet, Mobile)
+
+**Implementación**:
+- Framework: Tailwind CSS (ya incluido)
+- Breakpoints: sm (640px), md (1024px), lg (1280px)
+- Enfoque: Mobile-first CSS pero desarrollo desktop-first
+- Testing: 3 viewports (375px mobile, 768px tablet, 1440px desktop)
+
+```typescript
+// Ejemplo de layout responsive
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* Mobile: 1 columna | Tablet: 2 columnas | Desktop: 3 columnas */}
+</div>
+
+// Chat responsive
+<div className="flex flex-col lg:flex-row">
+  <div className="w-full lg:w-2/3">
+    {/* Task panel - full width en mobile, 2/3 en desktop */}
+  </div>
+  <div className="w-full lg:w-1/3 hidden lg:block">
+    {/* Chat - hidden en mobile, 1/3 en desktop */}
+  </div>
+</div>
+```
+
+**Consideraciones Mobile**:
+- Touch targets: mínimo 44x44px
+- No usar `hover` (usar `active` o `focus`)
+- Teclado virtual handling
+- Orientación portrait y landscape
+
+### 4. ⚡ Turbopack - Siempre Activo
+
+**Implementación**:
+- next.config.js: `experimental.turbopack: {}`
+- package.json: `"dev": "next dev --turbopack"`
+- Performance targets: Dev start <3s, Hot reload <1s, Build <30s
+
+```javascript
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    turbopack: {}, // Activo en dev
+    // NO usar swc (legacy)
+  },
+};
+module.exports = nextConfig;
+```
+
+```json
+// package.json
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
+  }
+}
+```
+
+**Verificación**:
+```bash
+npm run dev
+# Output debe mostrar: "compiled with turbopack"
+```
+
+### 5. 🤖 Arquitectura de Modelos Abiertos (Multi-AI)
+
+**Implementación**: Abstracción completa con Factory Pattern
+
+```typescript
+// lib/ai/types/IAIProvider.ts
+interface IAIProvider {
+  enrich(task: Task, context: Context): Promise<EnrichedTask>;
+  chat(messages: Message[]): Promise<string>;
+  refine(enrichment: Enrichment, prompt: string): Promise<string>;
+  getModels(): Promise<Model[]>;
+  stream(messages: Message[]): AsyncIterator<string>;
+}
+
+// lib/ai/providers/ClaudeProvider.ts
+class ClaudeProvider implements IAIProvider {
+  async enrich(task, context) { /* Claude API call */ }
+  async chat(messages) { /* Claude API call */ }
+  // ...
+}
+
+// lib/ai/providers/OpenAIProvider.ts
+class OpenAIProvider implements IAIProvider {
+  async enrich(task, context) { /* OpenAI API call */ }
+  async chat(messages) { /* OpenAI API call */ }
+  // ...
+}
+
+// lib/ai/providers/GeminiProvider.ts
+class GeminiProvider implements IAIProvider {
+  async enrich(task, context) { /* Gemini API call */ }
+  async chat(messages) { /* Gemini API call */ }
+  // ...
+}
+
+// lib/ai/AIFactory.ts
+export function createAIProvider(providerName: string): IAIProvider {
+  switch(providerName) {
+    case 'claude': return new ClaudeProvider();
+    case 'openai': return new OpenAIProvider();
+    case 'gemini': return new GeminiProvider();
+    default: throw new Error(`Unknown provider: ${providerName}`);
+  }
+}
+```
+
+**Configuración**:
+```typescript
+// lib/ai/config.ts
+export const AI_CONFIG = {
+  defaultProvider: 'claude', // Configurable via ENV
+  providers: {
+    claude: {
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      models: {
+        draft: 'claude-3-5-haiku-20241022',     // Rápido
+        standard: 'claude-3-5-sonnet-20241022',  // Balance
+        final: 'claude-opus-4-20250514'          // Robusto
+      },
+      temperature: 0.7,
+    },
+    openai: {
+      apiKey: process.env.OPENAI_API_KEY,
+      models: {
+        draft: 'gpt-4-mini',
+        standard: 'gpt-4-turbo',
+        final: 'gpt-4'
+      },
+      temperature: 0.7,
+    },
+    gemini: {
+      apiKey: process.env.GOOGLE_API_KEY,
+      models: {
+        draft: 'gemini-1.5-flash',
+        standard: 'gemini-1.5-pro',
+        final: 'gemini-2.0-pro'
+      },
+      temperature: 0.7,
+    },
+  },
+};
+```
+
+**Uso en API Routes**:
+```typescript
+// app/api/enrichment/process/route.ts
+export async function POST(req: Request) {
+  const { taskId, provider = AI_CONFIG.defaultProvider } = await req.json();
+
+  const aiProvider = createAIProvider(provider);
+  const enriched = await aiProvider.enrich(task, gitlabContext);
+
+  return Response.json(enriched);
+}
+```
+
+**Streaming Multi-Provider**:
+```typescript
+// Adapter pattern para normalizar streaming
+async function streamEnrichment(provider: string, task: Task) {
+  const aiProvider = createAIProvider(provider);
+
+  for await (const chunk of await aiProvider.stream([...])) {
+    yield chunk; // Normalizado a string
+  }
+}
+```
+
+**Base de Datos - Nueva Tabla**:
+```sql
+CREATE TABLE ai_providers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES user_profiles(id) ON DELETE CASCADE,
+  provider_name VARCHAR(50) NOT NULL, -- 'claude', 'openai', 'gemini'
+  api_key TEXT NOT NULL, -- Encrypted
+  is_active BOOLEAN DEFAULT true,
+  model VARCHAR(100), -- Modelo preferido para este provider
+  config JSONB, -- Temperatura, max_tokens, etc.
+  usage_count INT DEFAULT 0, -- Para tracking
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  UNIQUE(user_id, provider_name)
+);
+
+-- Tabla de interacciones para trackear qué modelo se usó
+ALTER TABLE interactions ADD COLUMN ai_provider VARCHAR(50);
+ALTER TABLE interactions ADD COLUMN ai_model VARCHAR(100);
+ALTER TABLE interactions ADD COLUMN token_usage INT;
+```
+
+**Fallback y Failover**:
+```typescript
+async function enrichWithFallback(
+  task: Task,
+  context: Context,
+  primaryProvider: string,
+  fallbackProvider?: string
+) {
+  try {
+    const provider = createAIProvider(primaryProvider);
+    return await provider.enrich(task, context);
+  } catch (error) {
+    if (fallbackProvider) {
+      logger.warn(`${primaryProvider} failed, trying fallback: ${fallbackProvider}`, error);
+      const fallback = createAIProvider(fallbackProvider);
+      return await fallback.enrich(task, context);
+    }
+    throw error;
+  }
+}
+```
+
+**UI para seleccionar modelo**:
+```typescript
+// components/molecules/ModelSelector.tsx
+'use client';
+import { AI_CONFIG } from '@/lib/ai/config';
+
+export function ModelSelector({ value, onChange }) {
+  return (
+    <select value={value} onChange={(e) => onChange(e.target.value)}>
+      {Object.entries(AI_CONFIG.providers).map(([name, config]) => (
+        <optgroup key={name} label={name.toUpperCase()}>
+          {Object.entries(config.models).map(([tier, model]) => (
+            <option key={model} value={model}>
+              {name} - {tier} ({model})
+            </option>
+          ))}
+        </optgroup>
+      ))}
+    </select>
+  );
+}
+```
+
+---
 
 ### 1. **Capa de Presentación (Frontend)**
 
@@ -884,7 +1222,75 @@ COMMIT;
 
 ## Decisiones Clave
 
-### 1. **Next.js como framework full-stack**
+### 1. **Turbopack por defecto (NO swc)**
+
+**Decisión**: Usar Turbopack como compilador en dev, activado en next.config.js
+
+**Justificación**:
+- Compilación 5-10x más rápida que SWC
+- Hot reload <1s (crítico para UX de desarrollo)
+- Nativo en Next.js 16
+- Mejor soporte para TypeScript y JSX
+
+**Trade-off**: Requiere Node 18+, pero ya lo tenemos
+
+### 2. **next-themes para Dark Mode**
+
+**Decisión**: Usar `next-themes` + Tailwind `dark:` classes
+
+**Justificación**:
+- Librería estándar en comunidad Next.js
+- Respeta `prefers-color-scheme` del SO automáticamente
+- Cambio dinámico sin flash FOUC (Flash of Unstyled Content)
+- Pequeño bundle size (~2KB gzip)
+
+**Alternativa rechazada**: Custom context + CSS variables (más trabajo, menos robusto)
+
+### 3. **next-intl para Multilanguage**
+
+**Decisión**: Usar `next-intl` con estructura `[locale]` en URLs
+
+**Justificación**:
+- Diseñada específicamente para Next.js 16
+- SEO-friendly (cada idioma es una URL diferente)
+- Server-side translation por defecto
+- Soporte para plurales, formatos de fecha, etc.
+
+**URLs**: `/es/tasks`, `/en/tasks`, `/es/login`
+
+**Alternativa rechazada**: i18next (más compleja, overhead innecesario)
+
+### 4. **Mobile-first Responsive con Tailwind**
+
+**Decisión**: CSS mobile-first con breakpoints sm/md/lg
+
+**Justificación**:
+- Tailwind es mobile-first por defecto
+- Ya incluido en stack
+- Componentes más ligeros en mobile
+- Testing en 3 viewports aseguran cobertura
+
+**No requiere**: Librería adicional (Tailwind lo maneja nativamente)
+
+### 5. **Factory Pattern para Multi-AI**
+
+**Decisión**: Abstracción completa con interface `IAIProvider` + Factory
+
+**Justificación**:
+- Cambiar de provider sin cambiar código (config-driven)
+- Fácil agregar nuevos providers (OpenAI, Gemini, LLaMA)
+- Testing con mock providers
+- Fallback automático si un provider falla
+
+**Providers soportados**:
+- Claude (Anthropic) - default
+- OpenAI (GPT-4, GPT-4-turbo)
+- Google Gemini (Pro, Pro Vision)
+- Extensible para otros
+
+**Trade-off**: Pequeño overhead de abstracción, pero justificado por flexibilidad
+
+### 6. **Next.js como framework full-stack**
 
 **Decisión**: Usar Next.js 16 con App Router, Server Components y API Routes
 
