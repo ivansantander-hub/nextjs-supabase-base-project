@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactCompiler: true,
-  experimental: {
-    turbopack: {},
+  // Turbopack se activa automáticamente con: next dev --turbopack
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 

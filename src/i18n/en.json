@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "Task Enrichment PO",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close"
+  },
+  "auth": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "signup": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "loginSuccess": "Logged in successfully",
+    "logoutSuccess": "Logged out successfully",
+    "invalidCredentials": "Invalid credentials"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "createTask": "Create task",
+    "editTask": "Edit task",
+    "deleteTask": "Delete task",
+    "taskName": "Task name",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "noTasks": "No tasks",
+    "loading": "Loading tasks..."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggleTheme": "Toggle theme"
+  },
+  "language": {
+    "spanish": "Español",
+    "english": "English",
+    "changeLanguage": "Change language"
+  }
+}

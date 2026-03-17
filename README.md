@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Technical Product Owner Platform
 
-## Getting Started
+> Plataforma para enriquecer tareas de Notion con análisis técnico de GitLab usando Claude API
 
-First, run the development server:
+**Status**: FASE 1 ✅ COMPLETADA
+
+## 📚 Documentación
+
+**→ [VE A docs/plan/README.md](./docs/plan/README.md) PARA TODA LA DOCUMENTACIÓN**
+
+La documentación está completamente organizada por fases. Empieza por:
+
+1. **[docs/plan/README.md](./docs/plan/README.md)** - Índice maestro
+2. **[docs/plan/fase-0-diseño/00-STATUS.md](./docs/plan/fase-0-diseño/00-STATUS.md)** - Estado del proyecto
+3. **[docs/plan/fase-1-setup/01-PROGRESS.md](./docs/plan/fase-1-setup/01-PROGRESS.md)** - FASE 1 checklist
+
+## 🚀 Quick Start
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Iniciar desarrollo (Turbopack)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Correr tests
+npm test
+
+# Build producción
+npm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Estructura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/              (Next.js 16 app directory)
+├── components/       (Atomic Design)
+│   ├── atoms/       (5 custom atoms)
+│   ├── molecules/   (Ready for Phase 2)
+│   ├── organisms/   (Ready for Phase 3)
+│   ├── templates/   (Ready for Phase 4)
+│   └── ui/          (18 shadcn/ui components)
+├── hooks/           (5 custom hooks)
+├── stores/          (5 Zustand stores)
+└── i18n/            (ES/EN translations)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+docs/
+└── plan/            (📖 Documentación por fases)
+    ├── fase-0-diseño/       (✅ Diseño completo)
+    ├── fase-1-setup/        (✅ Setup base completado)
+    ├── fase-2-molecules/    (⏳ Próxima)
+    └── fase-3-8/            (⏳ Futuro)
+```
 
-## Learn More
+## 🛠 Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Build**: Turbopack (<3s hot reload)
+- **UI**: shadcn/ui (19 components) + 5 custom atoms
+- **State**: Zustand (5 stores)
+- **i18n**: next-intl (ES, EN)
+- **Themes**: next-themes (dark/light)
+- **Testing**: Vitest + Testing Library
+- **Database**: Supabase PostgreSQL
+- **AI**: Claude API (extensible)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✅ FASE 1 Completada
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ✅ 18 componentes UI
+- ✅ 5 custom atoms
+- ✅ 5 Zustand stores
+- ✅ 5 custom hooks
+- ✅ 43+ test cases
+- ✅ Dark mode + i18n
+- ✅ Responsive design
+- ✅ Turbopack verificado
 
-## Deploy on Vercel
+**[→ Ver detalles de FASE 1](./docs/plan/fase-1-setup/02-SUMMARY.md)**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📖 Leer Documentación
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Diseño completo**: [docs/plan/fase-0-diseño/](./docs/plan/fase-0-diseño/)
+- **Implementación FASE 1**: [docs/plan/fase-1-setup/](./docs/plan/fase-1-setup/)
+- **Próximas fases**: [docs/plan/](./docs/plan/)

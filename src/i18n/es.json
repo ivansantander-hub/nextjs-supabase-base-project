@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "Task Enrichment PO",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "close": "Cerrar"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "signup": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "rememberMe": "Recuérdame",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginSuccess": "Sesión iniciada correctamente",
+    "logoutSuccess": "Sesión cerrada correctamente",
+    "invalidCredentials": "Credenciales inválidas"
+  },
+  "tasks": {
+    "title": "Tareas",
+    "createTask": "Crear tarea",
+    "editTask": "Editar tarea",
+    "deleteTask": "Eliminar tarea",
+    "taskName": "Nombre de la tarea",
+    "description": "Descripción",
+    "status": "Estado",
+    "priority": "Prioridad",
+    "dueDate": "Fecha de vencimiento",
+    "noTasks": "No hay tareas",
+    "loading": "Cargando tareas..."
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "toggleTheme": "Cambiar tema"
+  },
+  "language": {
+    "spanish": "Español",
+    "english": "English",
+    "changeLanguage": "Cambiar idioma"
+  }
+}
