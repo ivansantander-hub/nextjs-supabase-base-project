@@ -25,11 +25,14 @@
 
 Sistema web full-stack que enriquece tareas técnicas de un Product Owner mediante:
 
-- **Filtrado inteligente** de tareas en Notion por sprint, estado y tags
+- **Integraciones Multi-API** - Conecta con Notion (MVP), Jira (ready), extensible a otros
+- **Configuración Flexible** - Selecciona múltiples bases de datos y filtros manualmente
+- **Filtrado inteligente** de tareas por sprint, estado, tags, y filtros personalizados
 - **Enriquecimiento automático** usando Claude API + contexto de GitLab
 - **Almacenamiento revisable** en Supabase con snapshots de cada iteración
 - **Chat interactivo** para ajustes iterativos (MCPs de GitLab y Notion)
-- **Sincronización bidireccional** con Notion con auditoría completa
+- **Sincronización bidireccional** respetando configuración de usuario
+- **Auditoría completa** de todas las operaciones y cambios
 
 ### Stack Tecnológico (Actualizado con Requisitos Adicionales)
 

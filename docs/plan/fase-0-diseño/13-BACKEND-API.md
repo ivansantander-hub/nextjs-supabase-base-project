@@ -493,7 +493,299 @@ Obtener estado del enriquecimiento.
 
 ---
 
-## 🔌 Integrations Endpoints
+## 🔌 Integration Management Endpoints (NUEVO - Multi-API)
+
+### POST /integrations
+Registrar nueva integración (paso 1: conectar fuente).
+
+**Request:**
+```json
+{
+  "provider": "notion",
+  "name": "Mi Workspace Notion"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "id": "integration_uuid",
+      "provider": "notion",
+      "name": "Mi Workspace Notion",
+      "status": "pending_credentials"
+    }
+  }
+}
+```
+
+---
+
+### POST /integrations/:id/validate
+Validar API keys antes de guardar (paso 2a: validación).
+
+**Request:**
+```json
+{
+  "api_key": "ntn_xxx...",
+  "oauth_token": "optional_token"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "valid": true,
+    "workspace_name": "My Workspace",
+    "workspace_id": "abc123...",
+    "message": "Connection successful"
+  }
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Credenciales inválidas
+- `403 Forbidden` - Acceso denegado por API externa
+- `504 Gateway Timeout` - No se pudo alcanzar API externa
+
+---
+
+### POST /integrations/:id/save-keys
+Guardar API keys encriptadas (paso 2b: guardar).
+
+**Request:**
+```json
+{
+  "api_key": "ntn_xxx...",
+  "oauth_token": "optional_token"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "id": "integration_uuid",
+      "status": "credentials_saved",
+      "last_validated": "2026-03-17T10:00:00Z"
+    }
+  }
+}
+```
+
+---
+
+### GET /integrations/:id/databases
+Listar bases de datos/proyectos disponibles (paso 3a: obtener opciones).
+
+**Request:**
+```
+Authorization: Bearer <token>
+GET /integrations/integration_uuid/databases
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "provider": "notion",
+    "databases": [
+      {
+        "id": "db_uuid_1",
+        "name": "Product Backlog",
+        "type": "database",
+        "icon": "📋",
+        "created_time": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "db_uuid_2",
+        "name": "Bugs",
+        "type": "database",
+        "icon": "🐛",
+        "created_time": "2026-02-01T00:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+**Errors:**
+- `401 Unauthorized` - Token expirado
+- `400 Bad Request` - Integración no válida
+- `504 Gateway Timeout` - Error al conectar
+
+---
+
+### GET /integrations/:id/databases/:dbId/filters
+Listar filtros disponibles de una BD (paso 3a: obtener filtros).
+
+**Request:**
+```
+Authorization: Bearer <token>
+GET /integrations/integration_uuid/databases/db_uuid/filters
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "database_id": "db_uuid",
+    "database_name": "Product Backlog",
+    "properties": [
+      {
+        "name": "Status",
+        "id": "status_prop",
+        "type": "select",
+        "options": ["Todo", "In Progress", "Done"]
+      },
+      {
+        "name": "Priority",
+        "id": "priority_prop",
+        "type": "select",
+        "options": ["Low", "Medium", "High"]
+      },
+      {
+        "name": "Sprint",
+        "id": "sprint_prop",
+        "type": "relation",
+        "options": ["Sprint 1", "Sprint 2"]
+      }
+    ]
+  }
+}
+```
+
+---
+
+### POST /source-mappings
+Guardar selección de BD y filtros (paso 3b: guardar configuración).
+
+**Request:**
+```json
+{
+  "integration_id": "integration_uuid",
+  "source_database_id": "db_uuid_1",
+  "source_database_name": "Product Backlog",
+  "filters": {
+    "status": ["Todo", "In Progress"],
+    "priority": ["High"],
+    "sprint": "Sprint 1"
+  },
+  "sync_enabled": true
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "success": true,
+  "data": {
+    "mapping": {
+      "id": "mapping_uuid",
+      "integration_id": "integration_uuid",
+      "source_database_id": "db_uuid_1",
+      "filters": {
+        "status": ["Todo", "In Progress"],
+        "priority": ["High"]
+      },
+      "sync_enabled": true,
+      "last_synced": null,
+      "created_at": "2026-03-17T10:00:00Z"
+    }
+  }
+}
+```
+
+---
+
+### GET /source-mappings
+Obtener todas las configuraciones de mapeos del usuario.
+
+**Request:**
+```
+Authorization: Bearer <token>
+GET /source-mappings
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "mapping_uuid",
+      "integration_id": "integration_uuid",
+      "provider": "notion",
+      "source_database_name": "Product Backlog",
+      "filters": { "status": ["Todo", "In Progress"] },
+      "sync_enabled": true,
+      "last_synced": "2026-03-17T09:30:00Z"
+    }
+  ]
+}
+```
+
+---
+
+### PATCH /source-mappings/:id
+Actualizar configuración de mapeo.
+
+**Request:**
+```json
+{
+  "filters": {
+    "status": ["Todo"],
+    "priority": ["High", "Medium"]
+  },
+  "sync_enabled": false
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "mapping": {
+      "id": "mapping_uuid",
+      "filters": { "status": ["Todo"], "priority": ["High", "Medium"] },
+      "sync_enabled": false,
+      "updated_at": "2026-03-17T10:05:00Z"
+    }
+  }
+}
+```
+
+---
+
+### DELETE /source-mappings/:id
+Eliminar mapeo (dejar de sincronizar esa BD).
+
+**Request:**
+```
+Authorization: Bearer <token>
+DELETE /source-mappings/mapping_uuid
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": { "message": "Mapping deleted successfully" }
+}
+```
+
+---
+
+## 🔌 Integrations Endpoints (Legacy - Para OAuth Flow)
 
 ### GET /integrations
 Listar integraciones del usuario.

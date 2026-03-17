@@ -141,27 +141,66 @@ docs/plan/fase-2-auth/02-SUMMARY.md
 
 ---
 
-## 🔜 FASE 3: Task Management & Backend (BLOQUEADO POR 2.5)
+## 🔜 FASE 3: Task Management & Multi-API Integration (LISTO PARA EMPEZAR)
+
+**Objetivo**: CRUD de tareas, integración multi-API (Notion + Jira-ready), configuración de usuario, enriquecimiento con Claude, snapshots.
+
+**Importante**: Esta fase incluye arquitectura para múltiples APIs. Se comienza con Notion. Jira y otros proveedores estarán soportados en la arquitectura pero sin implementación inmediata.
 
 ---
 
-## 🔜 FASE 3: Task Management & Backend (LISTO PARA EMPEZAR)
+### 📊 Arquitectura de Integración Multi-API
 
-**Objetivo**: CRUD de tareas, endpoints backend, enriquecimiento con Claude, snapshots.
+**Principio**: Un usuario puede conectarse a múltiples fuentes (Notion, Jira, etc.), múltiples espacios/proyectos, y seleccionar qué bases de datos y filtros aplican a sus tareas.
 
-### Database (10 tablas)
-- [ ] users (existente, agregar campos nuevos)
-- [ ] tasks
-- [ ] task_snapshots
-- [ ] chat_messages
-- [ ] audit_logs
-- [ ] roles
-- [ ] integrations
-- [ ] ai_providers
-- [ ] ai_usage_logs
-- [ ] translations
+**Flujo de 3 Etapas para el Usuario**:
+1. **Conectar Fuente**: Usuario selecciona API (Notion, Jira, etc.) e ingresa credenciales
+2. **Validar & Guardar Keys**: Sistema valida las API keys, las almacena encriptadas en DB
+3. **Seleccionar Base de Datos & Filtros**: Usuario elige qué BD/proyecto y qué filtros aplican
 
-### Backend - Task Endpoints (17 endpoints)
+---
+
+### Database (13 tablas)
+
+**Tablas Core Existentes**:
+- [x] users (existente, agregar campos nuevos para integraciones)
+- [ ] user_integrations (NEW) - Relación usuario ↔ API integrada
+- [ ] integration_configs (NEW) - Configuración por integración (API keys encriptadas, metadata)
+
+**Tablas de Tareas & Sincronización**:
+- [ ] tasks - CRUD local de tareas
+- [ ] task_snapshots - Versionado de cambios
+- [ ] task_sources (NEW) - Mapeo de tareas locales ↔ fuentes externas (Notion, Jira, etc.)
+- [ ] source_mappings (NEW) - Mapeo de BD/proyecto remota ↔ configuración local de filtros
+
+**Tablas de Sistema**:
+- [ ] chat_messages - Mensajes de chat
+- [ ] audit_logs - Auditoría de todas las acciones
+- [ ] roles - Control de acceso
+- [ ] ai_providers - Proveedores de IA (Claude, etc.)
+- [ ] ai_usage_logs - Uso de APIs de IA
+
+---
+
+### Backend - Integration Management Endpoints (12 endpoints nuevos)
+
+**Integración & Credenciales**:
+- [ ] `POST /api/[locale]/integrations` - Registrar nueva integración (obtener lista de proveedores)
+- [ ] `POST /api/[locale]/integrations/[id]/validate` - Validar API keys antes de guardar
+- [ ] `POST /api/[locale]/integrations/[id]/save-keys` - Guardar keys encriptadas en DB
+- [ ] `GET /api/[locale]/integrations` - Listar integraciones activas del usuario
+- [ ] `GET /api/[locale]/integrations/[id]` - Obtener detalle de integración
+- [ ] `DELETE /api/[locale]/integrations/[id]` - Desconectar integración
+
+**Selección de BD & Filtros**:
+- [ ] `GET /api/[locale]/integrations/[id]/databases` - Listar BDs/proyectos disponibles
+- [ ] `GET /api/[locale]/integrations/[id]/databases/[dbId]/filters` - Listar filtros de BD
+- [ ] `POST /api/[locale]/source-mappings` - Guardar selección de BD + filtros del usuario
+- [ ] `GET /api/[locale]/source-mappings` - Obtener configuraciones guardadas
+- [ ] `PATCH /api/[locale]/source-mappings/[id]` - Actualizar configuración
+- [ ] `DELETE /api/[locale]/source-mappings/[id]` - Eliminar mapeo
+
+**Task CRUD Endpoints** (17 endpoints originales):
 - [ ] `GET /api/[locale]/tasks` - List con filters
 - [ ] `POST /api/[locale]/tasks` - Create
 - [ ] `GET /api/[locale]/tasks/[id]` - Get
@@ -170,20 +209,42 @@ docs/plan/fase-2-auth/02-SUMMARY.md
 - [ ] `POST /api/[locale]/tasks/[id]/enrich` - Enrich con Claude
 - [ ] `GET /api/[locale]/tasks/[id]/snapshots` - Get snapshots
 - [ ] `POST /api/[locale]/tasks/[id]/restore` - Restore snapshot
-- [ ] `POST /api/[locale]/notion/sync` - Sync from Notion
+- [ ] `POST /api/[locale]/notion/sync` - Sync from Notion (respeta source_mappings)
 - [ ] `POST /api/[locale]/notion/push` - Push to Notion
+- [ ] `POST /api/[locale]/[provider]/sync` - Sync dinámico para cualquier provider
 - [ ] Multi-AI provider abstraction
 - [ ] Audit logging service
 - [ ] Task filtering service
 - [ ] Snapshot versioning
 - [ ] Claude API integration
-- [ ] Notion API integration
+- [ ] Notion API integration (con soporte multi-BD)
 - [ ] GitLab context service
 
-### Frontend - Task Components
+---
+
+### Frontend - Integration Setup Components (Nuevos)
+
+**Fase 1 - Conectar Fuente**:
+- [ ] IntegrationSelector.tsx (atoms) - Dropdown de APIs disponibles
+- [ ] IntegrationForm.tsx (molecules) - Formulario para ingresar credenciales
+
+**Fase 2 - Validación & Guardado**:
+- [ ] ValidationSpinner.tsx (atoms) - Loading mientras se validan keys
+- [ ] CredentialsConfirm.tsx (molecules) - Confirmación de éxito
+
+**Fase 3 - Seleccionar BD & Filtros**:
+- [ ] DatabaseSelector.tsx (molecules) - Dropdown de BDs disponibles
+- [ ] FilterSelector.tsx (molecules) - Multi-select de filtros
+- [ ] SourceMappingConfig.tsx (organisms) - Panel completo de configuración
+
+**Flujo Total**:
+- [ ] IntegrationSetup.tsx (organisms) - Contenedor que maneja 3 etapas
+- [ ] `/[locale]/dashboard/integrations/setup` page - Ruta de configuración
+
+### Frontend - Task Components (Originales)
 - [ ] SearchBar.tsx (molecules)
 - [ ] TaskCard.tsx (molecules)
-- [ ] TaskFilters.tsx (organisms)
+- [ ] TaskFilters.tsx (organisms) - Ahora respeta source_mappings
 - [ ] TaskList.tsx (organisms)
 - [ ] TaskPreview.tsx (organisms)
 - [ ] TaskEditor.tsx (organisms)
@@ -192,11 +253,57 @@ docs/plan/fase-2-auth/02-SUMMARY.md
 ### Frontend - Task Pages
 - [ ] `/[locale]/dashboard/tasks` page
 - [ ] `/[locale]/dashboard/task/[id]` page
+- [ ] `/[locale]/dashboard/integrations` page (panel de integraciones activas)
+
+---
+
+### Services & Utilidades (Nuevos)
+
+**Integration Service**:
+- [ ] `integrationService.ts` - Manejo de APIs externas (Notion, Jira, etc.)
+  - `validateKeys(provider, keys)` - Validar credenciales
+  - `listDatabases(provider, keys)` - Obtener BDs disponibles
+  - `listFilters(provider, keys, dbId)` - Obtener filtros de BD
+  - `syncTasks(provider, config)` - Sincronizar tareas desde fuente
+
+**Encryption Service**:
+- [ ] `encryptionService.ts` - Encriptar/desencriptar API keys
+  - `encryptKey(key)` - Encriptar para almacenamiento
+  - `decryptKey(encryptedKey)` - Desencriptar para uso
+
+**Multi-Provider Adapter**:
+- [ ] `providerAdapter.ts` - Abstracción para soportar múltiples providers
+  - Interfaz común para Notion, Jira, futuros proveedores
+  - Métodos dinámicos basados en tipo de provider
+
+---
 
 ### Testing - FASE 3
-- [ ] Unit tests: taskService, filterStore
-- [ ] Integration tests: Task CRUD flows
-- [ ] E2E tests: Create → Edit → Save task
+- [ ] Unit tests: integrationService, encryptionService
+- [ ] Integration tests: Integration setup flow (3 etapas)
+- [ ] Integration tests: Task CRUD con source_mappings
+- [ ] E2E tests: Conectar Notion → Seleccionar BD → Sincronizar tareas
+- [ ] Security tests: Encryption de API keys, validación de permisos
+
+---
+
+### 🔐 Consideraciones de Seguridad
+
+- API keys encriptadas en DB (nunca en plaintext)
+- Keys desencriptadas solo en runtime, nunca enviadas al frontend
+- Validación de permisos: user_integrations + RLS en Supabase
+- Audit log de cada operación de integración
+- Rate limiting en endpoints de sincronización
+
+---
+
+### 📌 Notas de Arquitectura
+
+- **Multi-API Ready**: Arquitectura diseñada para soportar N APIs sin cambios mayores
+- **Notion (MVP)**: Primera implementación, completamente funcional
+- **Jira (Future)**: Arquitectura lista, sin implementación inmediata
+- **Configuración Flexible**: usuario ↔ múltiples fuentes, cada una con su configuración de BD/filtros
+- **Sincronización Respeta Configuración**: Solo sincroniza tareas que coinciden con source_mappings del usuario
 
 **Dependencias**: FASE 1 ✅ + FASE 2 ✅ + FASE 2.5 ✅
 

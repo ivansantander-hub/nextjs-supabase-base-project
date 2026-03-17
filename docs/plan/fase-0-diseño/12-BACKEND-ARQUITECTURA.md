@@ -97,15 +97,33 @@ GET    /api/tasks/:id/snapshots/:snapshotId - Obtener snapshot específico
 DELETE /api/tasks/:id/snapshots/:snapshotId - Eliminar snapshot
 ```
 
-### 3.5 Integraciones
+### 3.5 Integraciones (Multi-API)
 
+**Gestión de Integraciones**:
 ```
-GET    /api/integrations            - Listar integraciones configuradas
 POST   /api/integrations            - Registrar nueva integración
+POST   /api/integrations/:id/validate - Validar API keys
+POST   /api/integrations/:id/save-keys - Guardar keys encriptadas
+GET    /api/integrations            - Listar integraciones configuradas
 GET    /api/integrations/:id        - Obtener datos de integración
-PUT    /api/integrations/:id        - Actualizar integración
 DELETE /api/integrations/:id        - Desconectar integración
+```
+
+**Selección de BD & Filtros**:
+```
+GET    /api/integrations/:id/databases - Listar BDs disponibles
+GET    /api/integrations/:id/databases/:dbId/filters - Listar filtros
+POST   /api/source-mappings         - Guardar selección de BD + filtros
+GET    /api/source-mappings         - Obtener configuraciones
+PATCH  /api/source-mappings/:id     - Actualizar configuración
+DELETE /api/source-mappings/:id     - Eliminar mapeo
+```
+
+**Testing & Webhooks**:
+```
 POST   /api/integrations/:id/test   - Probar conexión
+POST   /api/webhooks/notion         - Webhook de Notion
+POST   /api/webhooks/gitlab         - Webhook de GitLab
 ```
 
 ### 3.6 Webhooks
@@ -133,6 +151,50 @@ PUT    /api/users/:id               - Actualizar usuario
 DELETE /api/users/:id               - Eliminar usuario
 PUT    /api/users/:id/role          - Cambiar rol del usuario
 ```
+
+---
+
+## 3.9 Multi-API Architecture (NUEVO)
+
+### Arquitectura de Integración Multi-API
+
+La plataforma soporta múltiples integraciones de terceros con soporte para conexión a:
+- **Notion** (MVP - implementación completa)
+- **Jira** (Arquitectura lista, sin implementación inmediata)
+- **Otros proveedores** (Extensible sin cambios mayores)
+
+### Flujo de 3 Etapas
+
+**Etapa 1: Conectar Fuente**
+- Usuario selecciona tipo de API (Notion, Jira, etc)
+- Ingresa credenciales o inicia OAuth flow
+- Sistema valida conexión
+
+**Etapa 2: Validar & Guardar Keys**
+- Backend valida credenciales contra API externa
+- Encripta y almacena en tabla `integration_configs`
+- Marca `validation_status` como 'valid' o 'invalid'
+
+**Etapa 3: Seleccionar BD & Filtros**
+- Backend consulta bases de datos/proyectos disponibles
+- Usuario selecciona BD y filtros aplicables
+- Sistema crea `source_mapping` con configuración guardada
+- Sincronización respeta estos mapeos
+
+### Tablas Involucradas
+
+- **integrations**: Registro de cada integración conectada
+- **user_integrations**: Relación usuario ↔ integración activa
+- **integration_configs**: API keys encriptadas + metadata
+- **source_mappings**: Configuración de BD/filtros por usuario
+- **task_sources**: Mapeo de tareas locales ↔ fuentes externas
+
+### Seguridad
+
+- Todas las API keys se almacenan **encriptadas** usando `encryption_key` del .env
+- Keys se desencriptan **solo en runtime**, nunca se envían al frontend
+- Validación de permisos: `user_integrations` + RLS en Supabase
+- Cada operación se audita en `audit_logs`
 
 ---
 
@@ -275,17 +337,18 @@ CREATE TABLE task_snapshots (
 CREATE INDEX idx_snapshots_task_id ON task_snapshots(task_id);
 ```
 
-#### Tabla: `integrations`
+#### Tabla: `integrations` (Actualizada)
 ```sql
 CREATE TABLE integrations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
-  integration_type VARCHAR(50) NOT NULL, -- 'notion', 'gitlab', 'github'
+  integration_type VARCHAR(50) NOT NULL, -- 'notion', 'gitlab', 'jira'
   name VARCHAR(255),
   is_connected BOOLEAN DEFAULT FALSE,
   access_token_encrypted VARCHAR(500),
   refresh_token_encrypted VARCHAR(500),
-  metadata JSONB,
+  api_key_encrypted VARCHAR(500),
+  metadata JSONB, -- { workspace_id, domain, etc }
   last_sync TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -294,6 +357,90 @@ CREATE TABLE integrations (
 
 CREATE INDEX idx_integrations_user_id ON integrations(user_id);
 CREATE INDEX idx_integrations_type ON integrations(integration_type);
+```
+
+#### Tabla: `user_integrations` (NEW)
+```sql
+CREATE TABLE user_integrations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
+  integration_id UUID NOT NULL,
+  status VARCHAR(50) DEFAULT 'active', -- 'active', 'inactive', 'error'
+  last_validated TIMESTAMP,
+  validation_error TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (integration_id) REFERENCES integrations(id) ON DELETE CASCADE,
+  UNIQUE(user_id, integration_id)
+);
+
+CREATE INDEX idx_user_integrations_user_id ON user_integrations(user_id);
+CREATE INDEX idx_user_integrations_status ON user_integrations(status);
+```
+
+#### Tabla: `integration_configs` (NEW)
+```sql
+CREATE TABLE integration_configs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
+  integration_id UUID NOT NULL,
+  provider VARCHAR(50) NOT NULL, -- 'notion', 'jira', etc
+  api_keys_encrypted JSONB, -- { api_key, oauth_token, etc }
+  metadata JSONB, -- { workspace_name, workspace_id, base_url, etc }
+  validation_status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'valid', 'invalid'
+  last_validated TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (integration_id) REFERENCES integrations(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_config_user_id ON integration_configs(user_id);
+CREATE INDEX idx_config_provider ON integration_configs(provider);
+```
+
+#### Tabla: `task_sources` (NEW)
+```sql
+CREATE TABLE task_sources (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL,
+  source_integration_id UUID NOT NULL,
+  source_id VARCHAR(255) NOT NULL, -- ID externo (notion page_id, jira key, etc)
+  source_type VARCHAR(50) NOT NULL, -- 'notion', 'jira', 'manual'
+  source_url VARCHAR(500),
+  last_synced TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+  FOREIGN KEY (source_integration_id) REFERENCES integrations(id) ON DELETE CASCADE,
+  UNIQUE(task_id, source_integration_id, source_id)
+);
+
+CREATE INDEX idx_task_sources_task_id ON task_sources(task_id);
+CREATE INDEX idx_task_sources_source_type ON task_sources(source_type);
+```
+
+#### Tabla: `source_mappings` (NEW)
+```sql
+CREATE TABLE source_mappings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
+  integration_id UUID NOT NULL,
+  source_database_id VARCHAR(255), -- ID de BD/proyecto en API externa
+  source_database_name VARCHAR(500),
+  filters JSONB, -- { property: value, ... } para filtrados
+  sync_enabled BOOLEAN DEFAULT TRUE,
+  last_synced TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (integration_id) REFERENCES integrations(id) ON DELETE CASCADE,
+  UNIQUE(user_id, integration_id, source_database_id)
+);
+
+CREATE INDEX idx_mappings_user_id ON source_mappings(user_id);
+CREATE INDEX idx_mappings_integration_id ON source_mappings(integration_id);
 ```
 
 #### Tabla: `audit_logs`
@@ -355,9 +502,17 @@ CREATE INDEX idx_rate_limits_endpoint ON rate_limits(endpoint);
 users (1) ──── (N) tasks
 users (1) ──── (N) task_snapshots (as created_by)
 users (1) ──── (N) integrations
+users (1) ──── (N) user_integrations
+users (1) ──── (N) integration_configs
+users (1) ──── (N) source_mappings
 users (1) ──── (N) audit_logs
 users (1) ──── (N) session_tokens
 tasks (1) ──── (N) task_snapshots
+tasks (1) ──── (N) task_sources
+integrations (1) ──── (N) user_integrations
+integrations (1) ──── (N) integration_configs
+integrations (1) ──── (N) task_sources
+integrations (1) ──── (N) source_mappings
 ```
 
 ---
