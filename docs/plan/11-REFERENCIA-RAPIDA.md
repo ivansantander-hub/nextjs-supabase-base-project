@@ -28,18 +28,34 @@ src/
 
 ---
 
+## Stack Frontend - Con shadcn/ui
+
+```typescript
+Next.js 16 + React 19
+├─ Styling: Tailwind CSS
+├─ Components Base: shadcn/ui (copy/paste, Radix UI accesible)
+├─ State: Zustand
+├─ Dark Mode: next-themes
+├─ i18n: next-intl
+├─ Compiler: Turbopack
+└─ Testing: Vitest + Playwright
+```
+
 ## Componentes por Nivel
 
-### Atoms (12)
-`Button` `Input` `Badge` `Card` `Spinner` `Icon` `Text` `Checkbox` `Select` `TextArea` `Avatar` `Divider`
+### shadcn/ui Base (17 componentes)
+`Button` `Input` `Card` `Dialog` `Select` `Dropdown` `Tabs` `Badge` `Toast` `Tooltip` `Popover` `Textarea` `Checkbox` `RadioGroup` `Switch` `Progress` `Skeleton`
 
-### Molecules (11)
-`SearchInput` `StatusBadge` `PriorityBadge` `TaskCard` `ChatMessage` `TabNav` `Breadcrumb` `Pagination` `ConfirmDialog` `FilterBar` `UserChip`
+### Atoms (custom + shadcn extensions)
+`Button` `Input` `Badge` `Text` `Icon` `Label` `Link` `Spinner`
 
-### Organisms (9)
-`TaskFilters` `TaskList` `TaskPreview` `TaskHistory` `ChatInterface` `ReviewPanel` `TaskEditor` `AuthForm` `Header` `Sidebar`
+### Molecules (shadcn combinations)
+`SearchInput` `StatusBadge` `TaskCard` `ChatMessage` `FormField` `FilterBar` `PaginationControl` `ConfirmDialog`
 
-### Templates (3)
+### Organisms (complex compositions)
+`TaskFilters` `TaskList` `TaskPreview` `TaskHistory` `ChatInterface` `ReviewPanel` `TaskEditor` `Header` `Sidebar`
+
+### Templates (layouts)
 `AuthTemplate` `DashboardTemplate` `ModalTemplate`
 
 ---

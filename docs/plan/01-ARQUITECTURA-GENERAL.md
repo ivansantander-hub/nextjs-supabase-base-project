@@ -1397,7 +1397,40 @@ while (true) {
 
 ## Trade-offs
 
-### 1. **Monolito vs Microservicios**
+### 0. **Dark Mode Implementación**
+
+| Aspecto | next-themes + Tailwind | Custom CSS Variables |
+|---------|------------------------|----------------------|
+| **Setup** | 5 min | 30 min |
+| **Bundle size** | 2KB | 10KB |
+| **FOUC** | No | Si (sin JS) |
+| **Mantenimiento** | Bajo | Alto |
+
+**Decisión: next-themes** ✅
+
+### 1. **i18n: next-intl vs i18next**
+
+| Aspecto | next-intl | i18next |
+|---------|-----------|---------|
+| **Next.js 16** | Nativo | Tercero |
+| **Complejidad** | Baja | Alta |
+| **SEO** | URLs diferentes | Query params |
+| **Server Components** | Soporte 1ero | Limitado |
+
+**Decisión: next-intl** ✅
+
+### 2. **AI Provider: Factory vs Simple Switch**
+
+| Aspecto | Factory Pattern | Simple Switch |
+|---------|-----------------|----------------|
+| **Extensibilidad** | Excelente | Limitada |
+| **Testing** | Fácil (mocks) | Difícil |
+| **Complejidad** | Media | Baja |
+| **Cambio dinámico** | Si | Si |
+
+**Decisión: Factory Pattern** ✅ (inversión en futuro)
+
+### 3. **Monolito vs Microservicios**
 
 | Aspecto | Monolito Next.js | Microservicios |
 |---------|------------------|-----------------|
