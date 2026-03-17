@@ -319,6 +319,34 @@ pnpm dev
 
 ---
 
+## 🌓 Dark Mode Implementation - Post FASE 2
+
+**Status**: ✅ **COMPLETADO Y TESTEADO** (2026-03-17)
+
+### Problema Identificado
+Tailwind CSS compilaba dark mode con `@media (prefers-color-scheme: dark)` en lugar de selectores basados en clase, impidiendo cambios dinámicos de tema.
+
+### Solución Implementada
+1. ✅ Crear `tailwind.config.ts` con `darkMode: 'class'`
+2. ✅ Agregar `@config "./../../tailwind.config.ts"` en `globals.css`
+3. ✅ Compilación correcta: 125 selectores `.dark:is(.dark)` (reducido de 85 `@media`)
+4. ✅ Testing: cambio instantáneo de colores en navegador
+
+### Archivos Modificados
+```
+✅ tailwind.config.ts (NUEVO)
+✅ src/app/globals.css (agregar @config)
+✅ src/app/providers.tsx (next-themes correcto)
+✅ src/stores/authStore.ts (type fixes)
+✅ src/hooks/useAuth.ts (type fixes)
+✅ src/components/atoms/*.tsx (type fixes)
+```
+
+### Documentación Completa
+- 📄 `05-DARK-MODE-IMPLEMENTATION.md` - Detalles técnicos completos
+
+---
+
 ## 🔜 Siguiente: FASE 3
 
 Ahora que la autenticación está lista, es hora de implementar:

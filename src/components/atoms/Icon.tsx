@@ -34,7 +34,7 @@ const iconVariants = cva("inline-block shrink-0", {
 })
 
 export interface IconProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
     VariantProps<typeof iconVariants> {
   children: React.ReactNode
 }

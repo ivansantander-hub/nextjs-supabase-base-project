@@ -1,20 +1,14 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import type { AuthUser } from '@/services/authService';
 
-export interface User {
-  id: string;
-  email: string;
-  name?: string;
-  role: 'admin' | 'tpo' | 'viewer' | 'integration';
-  theme_preference: 'light' | 'dark' | 'auto';
-  language_preference: 'es' | 'en';
-}
+export type User = AuthUser;
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  error: string | null;
+  error: Error | null;
   token: string | null;
   refreshToken: string | null;
 
@@ -22,7 +16,7 @@ interface AuthState {
   setUser: (user: User | null) => void;
   setToken: (token: string | null, refreshToken: string | null) => void;
   setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
+  setError: (error: Error | null) => void;
   logout: () => void;
   updateUserPreferences: (preferences: Partial<Pick<User, 'theme_preference' | 'language_preference'>>) => void;
 }

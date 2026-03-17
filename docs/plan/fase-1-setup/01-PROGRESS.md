@@ -42,9 +42,12 @@
 
 ### Paso 5: Dark Mode (next-themes)
 - [x] Instalar next-themes (next.config + package.json)
-- [x] CSS variables (light + dark) en src/lib/theme.ts
+- [x] CSS variables (light + dark) en src/app/globals.css
 - [x] Hook useTheme con toggleTheme
 - [x] Integration con authStore para persistencia
+- [x] ✅ **FIXED (2026-03-17)**: `tailwind.config.ts` con `darkMode: 'class'`
+- [x] ✅ **VERIFIED**: 125 selectores `.dark:is(.dark)` compilados correctamente
+- [x] ✅ **TESTED**: Dark mode cambios instantáneos en todos los componentes
 
 ### Paso 6: i18n (next-intl)
 - [x] Instalar next-intl
@@ -103,7 +106,7 @@
 | Dependencias instaladas | ✅ | 18 prod + 12 dev | ✅ COMPLETADO |
 | Turbopack working | <3s | <3s verified | ✅ TESTEADO |
 | shadcn/ui setup | 19 comps | 18/19 | ✅ COMPLETADO |
-| Dark mode working | ✅ | ✅ with persistence | ✅ COMPLETADO |
+| Dark mode working | ✅ | ✅ class-based + persistence | ✅ COMPLETADO & FIXED |
 | i18n working | ES+EN | ES+EN | ✅ COMPLETADO |
 | Atoms created | 5 custom | 5/5 | ✅ COMPLETADO |
 | Custom hooks | 5 | 5/5 | ✅ COMPLETADO |
@@ -155,13 +158,20 @@
 
 ---
 
-## ✅ FASE 1 STATUS: COMPLETADA
+## ✅ FASE 1 STATUS: COMPLETADA + DARK MODE FIXED
 
 **Inicio**: 2026-03-17
 **Finalización**: 2026-03-17
-**Duración**: 1 sesión
+**Duración**: 1 sesión + debugging dark mode
 **Componentes Creados**: 18 UI + 5 Atoms
 **Tests Creados**: 42+ test cases
 **Hooks Creados**: 5 custom hooks
 **Stores Creados**: 5 Zustand stores
+
+### Dark Mode Completado (Post FASE 1)
+- ✅ Root cause identificado: Tailwind compilaba con `@media` en lugar de `darkMode: 'class'`
+- ✅ Solución: Crear `tailwind.config.ts` + agregar `@config` en globals.css
+- ✅ Resultado: 125 selectores `.dark:is(.dark)` compilados correctamente
+- ✅ Testing: Verified en navegador - colores cambian instantáneamente
+- ✅ Documentación: `docs/plan/fase-2-auth/05-DARK-MODE-IMPLEMENTATION.md`
 

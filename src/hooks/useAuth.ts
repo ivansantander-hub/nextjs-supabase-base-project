@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { signIn, signUp, signOut, getCurrentUser, onAuthStateChange } from '@/services/authService';
 
 export function useAuth() {
-  const { user, loading, error, setUser, setLoading, setError } = useAuthStore();
+  const { user, isLoading, error, setUser, setLoading, setError, updateUserPreferences } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize auth state on mount
@@ -21,7 +21,7 @@ export function useAuth() {
         // Subscribe to auth changes - returns unsubscribe function
         const subscription = onAuthStateChange((authUser) => {
           setUser(authUser);
-        });
+        }) as any;
 
         // Handle both function and object return types from Supabase
         if (typeof subscription === 'function') {
@@ -99,12 +99,13 @@ export function useAuth() {
 
   return {
     user,
-    loading,
+    loading: isLoading,
     error,
     isInitialized,
     signUp: handleSignUp,
     signIn: handleSignIn,
     signOut: handleSignOut,
+    updateUserPreferences,
     isAuthenticated: !!user,
   };
 }
