@@ -411,9 +411,9 @@ Dark Mode:
 ### 2. Setup Environment (15 min)
 ```bash
 git clone <repo>
-pnpm install
+ppnpm install
 cp .env.example .env.local
-pnpm run dev
+ppnpm dev
 ```
 
 ### 3. Follow Phase 1 Checklist

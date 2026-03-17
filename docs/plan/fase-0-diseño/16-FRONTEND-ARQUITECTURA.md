@@ -764,7 +764,7 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      - run: pnpm install
+      - run: ppnpm install
       - run: pnpm lint
       - run: pnpm test:unit
       - run: pnpm test:integration
@@ -775,7 +775,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm install
+      - run: pnpm install
       - run: npm run build
       - uses: treosh/lighthouse-ci-action@v10
         with:

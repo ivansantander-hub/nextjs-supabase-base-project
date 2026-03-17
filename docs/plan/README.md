@@ -103,8 +103,8 @@ docs/plan/
 
 **Verificar completitud**:
 ```bash
-npm test                    # Debe pasar 43+ tests
-npm run dev                 # Debe levantar en <3s con Turbopack
+pnpm test                   # Debe pasar 43+ tests
+pnpm dev                    # Debe levantar en <3s con Turbopack
 ```
 
 ---
@@ -275,10 +275,10 @@ git diff                     # Cambios no committed
 
 ### Development
 ```bash
-npm run dev                  # Iniciar dev server (Turbopack)
-npm test                     # Correr tests (Vitest)
-npm run build                # Build production
-npm start                    # Iniciar en producción
+pnpm dev                     # Iniciar dev server (Turbopack)
+pnpm test                    # Correr tests (Vitest)
+pnpm build                   # Build production
+pnpm start                   # Iniciar en producción
 ```
 
 ### Estructura de código

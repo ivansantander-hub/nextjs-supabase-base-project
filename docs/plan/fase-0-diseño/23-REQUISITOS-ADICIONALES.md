@@ -181,7 +181,7 @@ module.exports = nextConfig;
 
 **Verificación**:
 ```bash
-npm run dev
+pnpm dev
 # Output debe mostrar: "compiled with turbopack"
 ```
 

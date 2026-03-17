@@ -706,7 +706,7 @@ export default nextConfig
 ### Verificar Turbopack
 
 ```bash
-npm run dev
+pnpm dev
 # Output esperado:
 # ▲ Next.js 16.1.6
 # - Local:        http://localhost:3000

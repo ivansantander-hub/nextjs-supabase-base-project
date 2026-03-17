@@ -56,7 +56,7 @@ pnpm add zod axios date-fns
 ### Setup Inicial de Turbopack
 - [ ] Verificar `next.config.js` tiene `experimental: { turbopack: {} }`
 - [ ] Verificar `package.json` tiene `"dev": "next dev --turbopack"`
-- [ ] Test: `npm run dev` - debe arrancar en <3s
+- [ ] Test: `pnpm dev` - debe arrancar en <3s
 
 ### Quality Tools Setup
 - [ ] ESLint configuration

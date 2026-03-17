@@ -18,16 +18,16 @@ La documentación está completamente organizada por fases. Empieza por:
 
 ```bash
 # Instalar dependencias
-npm install
+pnpm install
 
 # Iniciar desarrollo (Turbopack)
-npm run dev
+pnpm dev
 
 # Correr tests
-npm test
+pnpm test
 
 # Build producción
-npm build
+pnpm build
 ```
 
 ## 📁 Estructura

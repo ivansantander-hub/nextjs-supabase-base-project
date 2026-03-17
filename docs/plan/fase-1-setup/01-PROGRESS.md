@@ -32,7 +32,7 @@
 
 ### Paso 3: Setup Turbopack
 - [x] Verificar next.config.js (enabled)
-- [x] Test: `npm run dev` <3s ✅ TESTEADO Y COMPLETADO
+- [x] Test: `pnpm dev` <3s ✅ TESTEADO Y COMPLETADO
 
 ### Paso 4: shadcn/ui Setup
 - [x] Manual setup components.json

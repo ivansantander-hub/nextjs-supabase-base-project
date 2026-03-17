@@ -28,7 +28,7 @@ Se han integrado **5 requisitos críticos adicionales** en la arquitectura. No r
 
 #### Frontend
 ```
-- Setup: npm install next-themes
+- Setup: pnpm install next-themes
 - Layout root: Agregar <ThemeProvider>
 - Tailwind config: Enable dark mode (ya incluido)
 - Componentes: Usar dark: prefix en Tailwind classes
@@ -50,7 +50,7 @@ ALTER TABLE user_profiles ADD COLUMN theme_preference VARCHAR(10) DEFAULT 'auto'
 ```
 
 ### Checklist Implementación
-- [ ] `npm install next-themes`
+- [ ] `pnpm install next-themes`
 - [ ] Configurar `next-themes` en layout root
 - [ ] Auditar todos los colores de componentes → agregar `dark:` variants
 - [ ] BD migration: agregar `theme_preference` a `user_profiles`
@@ -90,7 +90,7 @@ src/
 
 #### Setup next-intl
 ```bash
-npm install next-intl
+pnpm install next-intl
 ```
 
 ```typescript
@@ -189,7 +189,7 @@ ALTER TABLE user_profiles ADD COLUMN language_preference VARCHAR(5) DEFAULT 'es'
 ```
 
 ### Checklist Implementación
-- [ ] `npm install next-intl`
+- [ ] `pnpm install next-intl`
 - [ ] Crear estructura `i18n/messages/es.json`, `en.json`
 - [ ] Setup `routing.ts` y `middleware.ts`
 - [ ] Refactorizar URLs: `app/(main)` → `app/[locale]/(main)`
@@ -275,7 +275,7 @@ module.exports = nextConfig;
 
 #### Verificación
 ```bash
-npm run dev
+pnpm dev
 # Output debe mostrar: "compiled with turbopack"
 # Hot reload debe ser <1s
 ```
@@ -283,7 +283,7 @@ npm run dev
 ### Checklist Implementación
 - [ ] Actualizar `next.config.js` con turbopack
 - [ ] Actualizar `package.json` script `dev`
-- [ ] Verificar: `npm run dev` muestra turbopack
+- [ ] Verificar: `pnpm dev` muestra turbopack
 - [ ] Verificar: hot reload <1s
 - [ ] CI/CD: agregar flag `--turbopack` en builds
 

@@ -43,7 +43,7 @@ React 19 + Next.js 16
 | Criterio | shadcn/ui | Custom | MUI | Chakra |
 |----------|-----------|--------|-----|--------|
 | Control | 100% | 100% | 70% | 80% |
-| Copy/paste | ✅ Yes | N/A | ❌ npm | ❌ npm |
+| Copy/paste | ✅ Yes | N/A | ✅ pnpm | ✅ pnpm |
 | Bundle impact | 0KB | Custom | 200KB | 150KB |
 | Dark mode | Native | Manual | Yes | Yes |
 | Tailwind | ✅ Yes | ✅ Yes | ❌ No | Partial |
@@ -52,7 +52,7 @@ React 19 + Next.js 16
 | Desarrollo | Rápido | Lento | Rápido | Rápido |
 
 **Conclusión**: shadcn/ui es óptimo porque:
-- ✅ Máximo control (copy/paste, no npm bloat)
+- ✅ Máximo control (copy/paste, optimizado)
 - ✅ Accesibilidad garantizada (Radix UI internals)
 - ✅ Dark mode nativo (CSS variables)
 - ✅ Perfecto con Atomic Design
