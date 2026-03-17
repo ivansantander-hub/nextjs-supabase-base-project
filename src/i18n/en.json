@@ -209,5 +209,27 @@
     "spanish": "Español",
     "english": "English",
     "changeLanguage": "Change language"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loading": "Loading your dashboard...",
+    "welcomeBack": "Welcome back!",
+    "personalizedPanel": "Here is your personalized control panel",
+    "authCompleted": "Authentication completed",
+    "sessionActive": "Your session is active and synced with Supabase",
+    "tasksToday": "Tasks Today",
+    "collaborators": "Collaborators",
+    "settings": "Settings",
+    "memberSince": "Member since today",
+    "email": "Email",
+    "verification": "Verification",
+    "completed": "✓ Completed",
+    "status": "Status",
+    "active": "Active",
+    "upcomingFeatures": "🚀 Upcoming Features",
+    "workingOnFeatures": "We are working on extraordinary new features for your productivity",
+    "advancedTaskManagement": "Advanced task management",
+    "realtimeCollaboration": "Real-time collaboration",
+    "logout": "Sign out"
   }
 }

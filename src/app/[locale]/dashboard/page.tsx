@@ -1,21 +1,26 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslations } from '@/contexts/I18nContext';
 import { useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
+import { LanguageSelector } from '@/components/atoms/LanguageSelector';
 import { ThemeSwitcher } from '@/components/atoms/ThemeSwitcher';
 import { LogOut, Mail, User, CheckCircle, Calendar, Settings } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || 'es';
+  const t = useTranslations('dashboard');
   const { user, isAuthenticated, signOut, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push('/es/auth/login');
+      router.push(`/${locale}/auth/login`);
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, router, locale]);
 
   if (loading) {
     return (
@@ -23,7 +28,7 @@ export default function DashboardPage() {
         <div className="text-center">
           <div className="w-12 h-12 rounded-full border-4 border-slate-200 dark:border-slate-700 border-t-blue-500 animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400 font-medium">
-            Cargando tu dashboard...
+            {t('loading')}
           </p>
         </div>
       </div>
@@ -36,7 +41,7 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     await signOut();
-    router.push('/es/auth/login');
+    router.push(`/${locale}/auth/login`);
   };
 
   const userInitials = (((user as any)?.user_metadata?.full_name) || user?.email || '')
@@ -61,6 +66,7 @@ export default function DashboardPage() {
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <LanguageSelector />
               <ThemeSwitcher />
               <Button
                 variant="outline"
@@ -68,7 +74,7 @@ export default function DashboardPage() {
                 icon={<LogOut className="w-4 h-4" />}
                 onClick={handleLogout}
               >
-                Cerrar sesión
+                {t('logout')}
               </Button>
             </div>
           </div>
@@ -80,10 +86,10 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="mb-12 animate-fade-in">
           <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-3">
-            ¡Bienvenido de vuelta!
+            {t('welcomeBack')}
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400">
-            Aquí está tu panel de control personalizado
+            {t('personalizedPanel')}
           </p>
         </div>
 
@@ -92,10 +98,10 @@ export default function DashboardPage() {
           <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-emerald-900 dark:text-emerald-100">
-              Autenticación completada
+              {t('authCompleted')}
             </p>
             <p className="text-sm text-emerald-700 dark:text-emerald-200">
-              Tu sesión está activa y sincronizada con Supabase
+              {t('sessionActive')}
             </p>
           </div>
         </div>
@@ -103,9 +109,9 @@ export default function DashboardPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {[
-            { icon: Calendar, label: 'Tareas Hoy', value: '0' },
-            { icon: User, label: 'Colaboradores', value: '1' },
-            { icon: Settings, label: 'Configuraciones', value: 'Completa' },
+            { icon: Calendar, labelKey: 'tasksToday', value: '0' },
+            { icon: User, labelKey: 'collaborators', value: '1' },
+            { icon: Settings, labelKey: 'settings', value: t('completed') },
           ].map((stat, idx) => {
             const Icon = stat.icon;
             return (
@@ -117,7 +123,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
-                      {stat.label}
+                      {t((stat as any).labelKey)}
                     </p>
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
                       {stat.value}
@@ -151,7 +157,7 @@ export default function DashboardPage() {
                   {((user as any)?.user_metadata?.full_name) || 'Usuario'}
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Miembro desde hoy
+                  {t('memberSince')}
                 </p>
               </div>
             </div>
@@ -162,7 +168,7 @@ export default function DashboardPage() {
                 <Mail className="w-5 h-5 text-slate-400 flex-shrink-0" />
                 <div>
                   <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                    Email
+                    {t('email')}
                   </p>
                   <p className="font-mono text-sm text-slate-900 dark:text-white">
                     {user.email}
@@ -173,18 +179,18 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
                   <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
-                    Verificación
+                    {t('verification')}
                   </p>
                   <p className="font-semibold text-slate-900 dark:text-white">
-                    ✓ Completada
+                    {t('completed')}
                   </p>
                 </div>
                 <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
                   <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
-                    Estado
+                    {t('status')}
                   </p>
                   <p className="font-semibold text-slate-900 dark:text-white">
-                    Activo
+                    {t('active')}
                   </p>
                 </div>
               </div>
@@ -195,16 +201,16 @@ export default function DashboardPage() {
         {/* Coming Soon Section */}
         <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 dark:from-blue-500/5 dark:to-emerald-500/5 border border-blue-200/50 dark:border-blue-800/50 rounded-lg p-8 text-center">
           <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-            🚀 Próximas funcionalidades
+            {t('upcomingFeatures')}
           </h3>
           <p className="text-slate-600 dark:text-slate-400 mb-6">
-            Estamos trabajando en nuevas características extraordinarias para tu productividad
+            {t('workingOnFeatures')}
           </p>
           <div className="flex items-center justify-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-            Gestión de tareas avanzada
+            {t('advancedTaskManagement')}
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-            Colaboración en tiempo real
+            {t('realtimeCollaboration')}
             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: '0.6s' }}></div>
           </div>
         </div>
