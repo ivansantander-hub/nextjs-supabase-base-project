@@ -139,17 +139,262 @@ docs/plan/fase-2-auth/02-SUMMARY.md
 
 ## 🔜 FASE 3: Task Management & Backend (BLOQUEADO POR 2.5)
 
-**Próxima FASE**: FASE 2.5 (Completar pendientes)
-**Bloqueador**: Sin FASE 2.5, FASE 3 no puede iniciarse
+---
+
+## 🔜 FASE 3: Task Management & Backend (LISTO PARA EMPEZAR)
+
+**Objetivo**: CRUD de tareas, endpoints backend, enriquecimiento con Claude, snapshots.
+
+### Database (10 tablas)
+- [ ] users (existente, agregar campos nuevos)
+- [ ] tasks
+- [ ] task_snapshots
+- [ ] chat_messages
+- [ ] audit_logs
+- [ ] roles
+- [ ] integrations
+- [ ] ai_providers
+- [ ] ai_usage_logs
+- [ ] translations
+
+### Backend - Task Endpoints (17 endpoints)
+- [ ] `GET /api/[locale]/tasks` - List con filters
+- [ ] `POST /api/[locale]/tasks` - Create
+- [ ] `GET /api/[locale]/tasks/[id]` - Get
+- [ ] `PATCH /api/[locale]/tasks/[id]` - Update
+- [ ] `DELETE /api/[locale]/tasks/[id]` - Delete
+- [ ] `POST /api/[locale]/tasks/[id]/enrich` - Enrich con Claude
+- [ ] `GET /api/[locale]/tasks/[id]/snapshots` - Get snapshots
+- [ ] `POST /api/[locale]/tasks/[id]/restore` - Restore snapshot
+- [ ] `POST /api/[locale]/notion/sync` - Sync from Notion
+- [ ] `POST /api/[locale]/notion/push` - Push to Notion
+- [ ] Multi-AI provider abstraction
+- [ ] Audit logging service
+- [ ] Task filtering service
+- [ ] Snapshot versioning
+- [ ] Claude API integration
+- [ ] Notion API integration
+- [ ] GitLab context service
+
+### Frontend - Task Components
+- [ ] SearchBar.tsx (molecules)
+- [ ] TaskCard.tsx (molecules)
+- [ ] TaskFilters.tsx (organisms)
+- [ ] TaskList.tsx (organisms)
+- [ ] TaskPreview.tsx (organisms)
+- [ ] TaskEditor.tsx (organisms)
+- [ ] TaskHistory.tsx (organisms)
+
+### Frontend - Task Pages
+- [ ] `/[locale]/dashboard/tasks` page
+- [ ] `/[locale]/dashboard/task/[id]` page
+
+### Testing - FASE 3
+- [ ] Unit tests: taskService, filterStore
+- [ ] Integration tests: Task CRUD flows
+- [ ] E2E tests: Create → Edit → Save task
+
+**Dependencias**: FASE 1 ✅ + FASE 2 ✅ + FASE 2.5 ✅
+
+---
+
+## 💬 FASE 4: Chat & MCPs (DESPUÉS DE FASE 3)
+
+**Objetivo**: Interfaz de chat interactivo con MCPs de GitLab y Notion.
+
+### Frontend - Chat Components
+- [ ] ChatMessage.tsx (molecules)
+- [ ] ChatInterface.tsx (organisms)
+
+### Frontend - Chat Pages
+- [ ] `/[locale]/dashboard/chat` page
+
+### Frontend - Chat Services
+- [ ] chatService.ts con MCPs
+- [ ] MCP integration (GitLab + Notion)
+- [ ] Streaming responses from Claude
+
+### Backend - Chat Endpoints (2)
+- [ ] `POST /api/[locale]/chat` - Send message
+- [ ] `GET /api/[locale]/chat/[taskId]` - Get history
+
+### Testing - FASE 4
+- [ ] Integration tests: ChatInterface
+- [ ] E2E tests: Send → Get response
+
+**Dependencias**: FASE 3 ✅
+
+---
+
+## ✅ FASE 5: Review & Aprobaciones (DESPUÉS DE FASE 3)
+
+**Objetivo**: Panel de revisión para aprobar/rechazar enriquecimientos.
+
+### Frontend - Review Components
+- [ ] ReviewPanel.tsx (organisms)
+- [ ] Side-by-side diff viewer
+
+### Frontend - Review Pages
+- [ ] `/[locale]/dashboard/review` page
+
+### Frontend - Review Services
+- [ ] reviewService.ts
+- [ ] Diff generation
+
+### Backend - Review Endpoints (3)
+- [ ] `GET /api/[locale]/review/pending` - Get pending
+- [ ] `POST /api/[locale]/review/[id]/approve` - Approve
+- [ ] `POST /api/[locale]/review/[id]/reject` - Reject
+
+### Testing - FASE 5
+- [ ] Integration tests: ReviewPanel
+- [ ] E2E tests: Approve/reject flow
+
+**Dependencias**: FASE 3 ✅
+
+---
+
+## 📜 FASE 6: Historial (DESPUÉS DE FASE 3)
+
+**Objetivo**: Visualización de historial y restauración de snapshots.
+
+### Frontend - History Components
+- [ ] HistoryItem.tsx (molecules)
+- [ ] Timeline.tsx (molecules)
+- [ ] TaskHistory.tsx (organisms - integrated in task preview)
+
+### Frontend - History Pages
+- [ ] `/[locale]/dashboard/history` page
+
+### Backend - History Endpoints
+- [ ] `GET /api/[locale]/tasks/[id]/history` - Get history
+- [ ] Snapshots storage y retrieval
+
+### Testing - FASE 6
+- [ ] E2E tests: View history + restore
+
+**Dependencias**: FASE 3 ✅
+
+---
+
+## 🧪 FASE 7: Testing & Optimización (DESPUÉS DE FASE 6)
+
+**Objetivo**: >80% coverage, optimizar performance, validar accesibilidad WCAG 2.1 AA.
+
+### Unit Tests (>80% coverage)
+- [ ] All atoms (19 tests)
+- [ ] All molecules (15+ tests)
+- [ ] Custom hooks (10+ tests)
+- [ ] Services (task, chat, auth, etc.)
+- [ ] Stores (all 5 Zustand stores)
+- [ ] Utils + helpers
+
+### Integration Tests
+- [ ] Component interactions
+- [ ] Store + Component integration
+- [ ] API mocking (MSW)
+- [ ] Dark mode switch in context
+- [ ] i18n string loading
+- [ ] Responsive layout breakpoints
+
+### E2E Tests (Playwright)
+- [ ] Full auth flow
+- [ ] Full task flow (create → edit → enrich → review → approve)
+- [ ] Chat with MCPs
+- [ ] Dark mode persistence
+- [ ] Language change updates all UI
+- [ ] Responsive on 3 viewports
+
+### Performance & Accessibility
+- [ ] Bundle analysis < 200KB gzipped
+- [ ] Lighthouse CI ≥90 Performance
+- [ ] Lighthouse CI ≥90 Accessibility
+- [ ] Core Web Vitals (LCP, FID, CLS)
+- [ ] axe-core automated tests (0 violations)
+- [ ] Keyboard navigation
+- [ ] Screen reader testing
+- [ ] Color contrast WCAG AA
+
+**Dependencias**: FASE 6 ✅
+
+---
+
+## 🚀 FASE 8: Polish & Deployment (DESPUÉS DE FASE 7)
+
+**Objetivo**: Preparar para producción: CI/CD, staging, production deployment.
+
+### Code Quality & CI/CD
+- [ ] Bug fixes & refinement
+- [ ] Edge case handling
+- [ ] Error messages improvement
+- [ ] GitHub Actions workflow
+- [ ] Pre-commit hooks (ESLint + Prettier + TypeScript)
+- [ ] Automated tests on every PR
+- [ ] Lighthouse CI
+
+### Environment & Deployment
+- [ ] `.env.local` setup
+- [ ] Secrets management (API keys, tokens)
+- [ ] Build optimization (`next build`)
+- [ ] Error tracking setup
+- [ ] Analytics setup
+
+### Staging & Production
+- [ ] Deploy to staging Vercel
+- [ ] Smoke tests on staging
+- [ ] Cross-browser testing
+- [ ] Database migrations
+- [ ] Domain DNS setup
+- [ ] SSL certificate verification
+- [ ] Deploy to production Vercel
+- [ ] Monitoring setup
+- [ ] Rollback plan ready
+
+**Dependencias**: FASE 7 ✅
+
+---
+
+## 📊 Métricas de Éxito
+
+| Métrica | Target | Status |
+|---------|--------|--------|
+| FASE 1 Coverage | 100% | ✅ 43/43 tests |
+| FASE 2 Auth | 100% | ✅ Supabase ready |
+| FASE 2.5 Components | 100% | ✅ 8/8 items |
+| TypeScript strict | 0 errores | ✅ Cumple |
+| ESLint | 0 warnings | ✅ Cumple |
+| Dark mode | Funcional | ✅ Cumple |
+| i18n (ES+EN) | 100% | ✅ Cumple |
+| Responsive | 3 viewports | ✅ Cumple |
+| Bundle size | <200KB | ⏳ FASE 7 |
+| Test coverage | >80% | ⏳ FASE 7 |
+| Accessibility | WCAG AA | ⏳ FASE 7 |
+
+---
+
+## 🗺️ Timeline Visual
+
+```
+Semana 1:   FASE 1 ✅ + FASE 2 ✅ + FASE 2.5 ✅
+Semana 2-3: FASE 3 (Task Management) 🔜
+Semana 3-4: FASE 4 (Chat) + FASE 5 (Review)
+Semana 4:   FASE 6 (Historial)
+Semana 4-5: FASE 7 (Testing & Optimization)
+Semana 5:   FASE 8 (Deployment)
+────────────────────────────────────
+Total:      8-9 semanas hasta producción
+```
 
 ---
 
 ## 🎯 Próximos Pasos
 
-1. ✅ Completar FASE 2.5 (8 items pendientes)
-2. 🔜 Iniciar FASE 3 (Task Management & Backend)
+1. ✅ FASE 1: Completada (43 tests)
+2. ✅ FASE 2: Completada (Auth con Supabase)
+3. ✅ FASE 2.5: Completada (8 componentes + middleware)
+4. 🔜 **FASE 3: Iniciar Task Management** (DESBLOQUEADA)
 
 ---
 
-*Actualizado: 2026-03-17 - Documento STATUS es oficial, se actualiza aquí*
-*No crear nuevos .md, solo actualizar este STATUS conforme avance*
+**DOCUMENTO STATUS OFICIAL**: Se actualiza conforme se avanza, sin crear nuevos .md.
+*Última actualización: 2026-03-17*
