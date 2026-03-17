@@ -20,3 +20,12 @@ export { Card } from "./Card"
 export type { CardProps } from "./Card"
 
 export { ThemeSwitcher } from "./ThemeSwitcher"
+
+export { Dialog } from "./Dialog"
+export type { DialogProps } from "./Dialog"
+
+export { Select } from "./Select"
+export type { SelectProps, SelectOption } from "./Select"
+
+export { Tabs, TabPanel } from "./Tabs"
+export type { TabsProps, TabItem } from "./Tabs"

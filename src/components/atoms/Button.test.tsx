@@ -42,10 +42,10 @@ describe("Button", () => {
   })
 
   it("renders with different variants", () => {
-    const { rerender } = render(<Button variant="default">Default</Button>)
-    expect(screen.getByRole("button")).toHaveClass("bg-primary")
+    const { rerender } = render(<Button variant="primary">Primary</Button>)
+    expect(screen.getByRole("button")).toHaveClass("bg-gradient-to-r")
 
     rerender(<Button variant="outline">Outline</Button>)
-    expect(screen.getByRole("button")).toHaveClass("border")
+    expect(screen.getByRole("button")).toHaveClass("border-2")
   })
 })

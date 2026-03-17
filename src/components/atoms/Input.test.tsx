@@ -36,7 +36,7 @@ describe("Input", () => {
   it("shows error styles when error is present", () => {
     render(<Input error="Error!" />)
     const input = screen.getByRole("textbox")
-    expect(input).toHaveClass("border-destructive")
+    expect(input).toHaveClass("border-red-500")
   })
 
   it("is disabled when disabled prop is true", () => {
