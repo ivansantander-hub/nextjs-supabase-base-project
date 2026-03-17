@@ -20,11 +20,25 @@
     "signup": "Sign up",
     "email": "Email",
     "password": "Password",
+    "fullName": "Full name",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot your password?",
     "loginSuccess": "Logged in successfully",
     "logoutSuccess": "Logged out successfully",
-    "invalidCredentials": "Invalid credentials"
+    "invalidCredentials": "Invalid credentials",
+    "loginTitle": "Sign in to your account",
+    "signupTitle": "Create a new account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "loading": "Loading...",
+    "validation": {
+      "requiredFields": "Please fill in all required fields",
+      "passwordMinLength": "Password must be at least 6 characters"
+    },
+    "errors": {
+      "loginFailed": "Failed to sign in",
+      "signupFailed": "Failed to sign up"
+    }
   },
   "tasks": {
     "title": "Tasks",

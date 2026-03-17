@@ -20,11 +20,25 @@
     "signup": "Registrarse",
     "email": "Correo electrónico",
     "password": "Contraseña",
+    "fullName": "Nombre completo",
     "rememberMe": "Recuérdame",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "loginSuccess": "Sesión iniciada correctamente",
     "logoutSuccess": "Sesión cerrada correctamente",
-    "invalidCredentials": "Credenciales inválidas"
+    "invalidCredentials": "Credenciales inválidas",
+    "loginTitle": "Inicia sesión en tu cuenta",
+    "signupTitle": "Crea una nueva cuenta",
+    "noAccount": "¿No tienes cuenta?",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "loading": "Cargando...",
+    "validation": {
+      "requiredFields": "Por favor completa todos los campos requeridos",
+      "passwordMinLength": "La contraseña debe tener al menos 6 caracteres"
+    },
+    "errors": {
+      "loginFailed": "Error al iniciar sesión",
+      "signupFailed": "Error al registrarse"
+    }
   },
   "tasks": {
     "title": "Tareas",
