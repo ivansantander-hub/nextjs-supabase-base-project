@@ -10,7 +10,7 @@ export function useAuth() {
 
   // Initialize auth state on mount
   useEffect(() => {
-    let unsubscribe: { unsubscribe: () => void } | undefined;
+    let unsubscribe: (() => void) | undefined;
 
     const initAuth = async () => {
       try {
@@ -18,10 +18,17 @@ export function useAuth() {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
 
-        // Subscribe to auth changes
-        unsubscribe = onAuthStateChange((authUser) => {
+        // Subscribe to auth changes - returns unsubscribe function
+        const subscription = onAuthStateChange((authUser) => {
           setUser(authUser);
         });
+
+        // Handle both function and object return types from Supabase
+        if (typeof subscription === 'function') {
+          unsubscribe = subscription;
+        } else if (subscription && typeof subscription.unsubscribe === 'function') {
+          unsubscribe = () => subscription.unsubscribe();
+        }
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Auth initialization failed'));
       } finally {
@@ -34,7 +41,7 @@ export function useAuth() {
 
     return () => {
       if (unsubscribe) {
-        unsubscribe.unsubscribe();
+        unsubscribe();
       }
     };
   }, [setUser, setLoading, setError]);
