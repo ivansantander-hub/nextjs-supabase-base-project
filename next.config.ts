@@ -1,9 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Turbopack se activa automáticamente con: next dev --turbopack
+  // Turbopack se activa con: next dev --turbopack
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 };
 

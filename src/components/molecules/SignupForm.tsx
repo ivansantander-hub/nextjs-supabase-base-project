@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslations } from 'next-intl';
 
 interface SignupFormProps {
   onSuccess?: () => void;
@@ -13,7 +12,6 @@ interface SignupFormProps {
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
   const router = useRouter();
-  const t = useTranslations('auth');
   const { signUp, loading, error } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -25,21 +23,21 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setFormError(null);
 
     if (!email || !password) {
-      setFormError(t('validation.requiredFields'));
+      setFormError('Por favor completa los campos requeridos');
       return;
     }
 
     if (password.length < 6) {
-      setFormError(t('validation.passwordMinLength'));
+      setFormError('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
     const { success, error } = await signUp(email, password, fullName);
     if (success) {
       if (onSuccess) onSuccess();
-      router.push('/dashboard');
+      router.push('/es/dashboard');
     } else {
-      setFormError(error?.message || t('errors.signupFailed'));
+      setFormError(error?.message || 'Error al registrarse');
     }
   };
 
@@ -47,28 +45,28 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="fullName" className="block text-sm font-medium mb-1">
-          {t('fullName')}
+          Nombre completo (opcional)
         </label>
         <Input
           id="fullName"
           type="text"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          placeholder="John Doe"
+          placeholder="Juan Pérez"
           disabled={loading}
         />
       </div>
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-1">
-          {t('email')}
+          Correo electrónico
         </label>
         <Input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
+          placeholder="tú@ejemplo.com"
           disabled={loading}
           required
         />
@@ -76,7 +74,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
 
       <div>
         <label htmlFor="password" className="block text-sm font-medium mb-1">
-          {t('password')}
+          Contraseña
         </label>
         <Input
           id="password"
@@ -96,7 +94,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       )}
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? t('loading') : t('signup')}
+        {loading ? 'Cargando...' : 'Registrarse'}
       </Button>
     </form>
   );

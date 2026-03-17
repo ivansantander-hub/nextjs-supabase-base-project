@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslations } from 'next-intl';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -13,7 +12,6 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter();
-  const t = useTranslations('auth');
   const { signIn, loading, error } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -24,16 +22,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     setFormError(null);
 
     if (!email || !password) {
-      setFormError(t('validation.requiredFields'));
+      setFormError('Por favor completa todos los campos');
       return;
     }
 
     const { success, error } = await signIn(email, password);
     if (success) {
       if (onSuccess) onSuccess();
-      router.push('/dashboard');
+      router.push('/es/dashboard');
     } else {
-      setFormError(error?.message || t('errors.loginFailed'));
+      setFormError(error?.message || 'Error al iniciar sesión');
     }
   };
 
@@ -41,14 +39,14 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-1">
-          {t('email')}
+          Correo electrónico
         </label>
         <Input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
+          placeholder="tú@ejemplo.com"
           disabled={loading}
           required
         />
@@ -56,7 +54,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
       <div>
         <label htmlFor="password" className="block text-sm font-medium mb-1">
-          {t('password')}
+          Contraseña
         </label>
         <Input
           id="password"
@@ -76,7 +74,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       )}
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? t('loading') : t('login')}
+        {loading ? 'Cargando...' : 'Iniciar sesión'}
       </Button>
     </form>
   );

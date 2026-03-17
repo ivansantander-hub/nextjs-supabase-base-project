@@ -2,24 +2,22 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { user, isAuthenticated, signOut, loading } = useAuth();
-  const t = useTranslations('common');
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push('/auth/login');
+      router.push('/es/auth/login');
     }
   }, [isAuthenticated, loading, router]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
-        <p className="text-gray-600 dark:text-gray-400">{t('loading')}</p>
+        <p className="text-gray-600 dark:text-gray-400">Cargando...</p>
       </div>
     );
   }
