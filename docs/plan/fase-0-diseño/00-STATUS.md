@@ -71,20 +71,24 @@ tailwind.config.ts              (darkMode: 'class')
 
 ## ✅ FASE 2: Autenticación (COMPLETADA)
 
-**Objetivo**: Autenticación segura con Supabase, persistencia de preferencias.
+**Objetivo**: Autenticación segura con Supabase, persistencia de preferencias, password recovery.
 
 ### ✅ Completado
 - [x] Supabase Auth: signUp, signIn, signOut, getCurrentUser
 - [x] JWT tokens con refresh automático
 - [x] Protected routes via middleware
-- [x] LoginForm molecule + page
+- [x] LoginForm molecule + page con link a forgot password
 - [x] SignupForm molecule + page
+- [x] ForgotPasswordForm + /auth/forgot-password page (Supabase reset)
+- [x] LanguageSelector atom (ES/EN switcher visible)
 - [x] useAuth hook integrado con Zustand
 - [x] Database: user_preferences + audit_logs con RLS
-- [x] Testing: 11+ casos (authService, LoginForm)
-- [x] i18n: Strings de auth en ES/EN
-- [x] Dark mode: Completo en formularios
+- [x] Testing: 11+ casos (authService, LoginForm, password recovery)
+- [x] i18n: Strings de auth en ES/EN, dynamic locale routing
+- [x] Dark mode: 100% completo en todos los formularios
 - [x] Supabase credentials configuradas (.env)
+- [x] Language selector visible en header (top-right)
+- [x] Password recovery flow end-to-end
 
 ### Entregables
 ```
